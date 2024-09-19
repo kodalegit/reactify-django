@@ -9,6 +9,7 @@ async function main() {
     .version("0.1.0");
 
   program.addCommand(init);
+  program.parse();
 }
 
 main();
