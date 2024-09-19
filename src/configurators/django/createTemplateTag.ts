@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { mkdirSync, promises as fs } from "fs";
 import * as path from "path";
 
 export async function createTemplateTag(appName: string) {
@@ -20,11 +20,11 @@ function reactRoot(): string {
 `;
 
   const tagPath = path.join(appName, "templatetags", "react_root.ts");
-  fs.mkdirSync(path.dirname(tagPath), { recursive: true });
-  fs.writeFileSync(tagPath, tagCode);
+  mkdirSync(path.dirname(tagPath), { recursive: true });
+  await fs.writeFile(tagPath, tagCode);
 
   const initPath = path.join(appName, "templatetags", "__init__.py");
-  fs.writeFileSync(
+  fs.writeFile(
     initPath,
     "# This file makes the templatetags directory a Python package\n"
   );

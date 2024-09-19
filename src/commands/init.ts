@@ -50,11 +50,7 @@ export const init = new Command()
 
     try {
       // Configuration steps
-      await configureDjango(
-        responses.projectName,
-        responses.appName,
-        responses.useTypescript
-      );
+      await configureDjango(responses.projectName, responses.appName);
       spinner.text = "Setting up React...";
       await configureReact(
         responses.appName,

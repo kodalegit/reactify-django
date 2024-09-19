@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 export async function createGitignore() {
   const gitignoreContent: string = `# Python
@@ -35,5 +35,5 @@ export async function createGitignore() {
     .virtualenv/
     `;
 
-  fs.writeFileSync(".gitignore", gitignoreContent);
+  await fs.writeFile(".gitignore", gitignoreContent);
 }

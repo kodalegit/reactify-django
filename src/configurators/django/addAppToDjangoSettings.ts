@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { existsSync, promises as fs } from "fs";
 import * as path from "path";
 
 export async function addAppToDjangoSettings(
@@ -6,16 +6,16 @@ export async function addAppToDjangoSettings(
   appName: string
 ) {
   const settingsPath = path.join(projectName, "settings.py");
-  if (!fs.existsSync(settingsPath)) {
+  if (!existsSync(settingsPath)) {
     throw new Error(`${settingsPath} does not exist`);
   }
 
   try {
-    let settingsContent = fs.readFileSync(settingsPath, "utf8").split("\n");
+    let settingsContent = await fs.readFile(settingsPath, "utf8");
     let inInstalledApps = false;
     let newContent = "";
 
-    for (let line of settingsContent) {
+    for (let line of settingsContent.split("/n")) {
       if (line.trim().startsWith("INSTALLED_APPS")) {
         inInstalledApps = true;
         newContent += line + "\n";
@@ -31,11 +31,13 @@ export async function addAppToDjangoSettings(
       newContent += line + "\n";
     }
 
-    fs.writeFileSync(settingsPath, newContent);
+    await fs.writeFile(settingsPath, newContent);
     console.log(
       `App '${appName}' has been added to INSTALLED_APPS in ${settingsPath}`
     );
-  } catch (e) {
-    throw new Error(`An error occurred while accessing ${settingsPath}: ${e}`);
+  } catch (e: any) {
+    throw new Error(
+      `An error occurred while accessing ${settingsPath}: ${e.message}`
+    );
   }
 }
