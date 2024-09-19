@@ -20,7 +20,7 @@ interface ESLintConfig {
   };
 }
 
-export async function configureESLint(useTypescript: boolean): Promise<void> {
+export async function configureEslint(useTypescript: boolean): Promise<void> {
   const eslintConfig: ESLintConfig = {
     env: { browser: true, es2020: true },
     extends: ["eslint:recommended", "plugin:react/recommended"],

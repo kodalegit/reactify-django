@@ -2,17 +2,11 @@ import { mkdirSync, promises as fs } from "fs";
 import * as path from "path";
 import { installNpmPackages } from "./installNpmPackages";
 
-interface ConfigureReactOptions {
-  appName: string;
-  useTypeScript: boolean;
-  useTailwind: boolean;
-}
-
-export async function configureReact({
-  appName,
-  useTypeScript,
-  useTailwind,
-}: ConfigureReactOptions) {
+export async function configureReact(
+  appName: string,
+  useTypeScript: boolean,
+  useTailwind: boolean
+) {
   // Navigate to app directory
   process.chdir(appName);
 
