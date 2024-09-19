@@ -8,11 +8,11 @@ interface ConfigureReactOptions {
   useTailwind: boolean;
 }
 
-export function configureReact({
+export async function configureReact({
   appName,
   useTypeScript,
   useTailwind,
-}: ConfigureReactOptions): void {
+}: ConfigureReactOptions) {
   // Navigate to app directory
   process.chdir(appName);
 
