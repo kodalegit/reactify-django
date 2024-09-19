@@ -1,14 +1,13 @@
 import { Command } from "commander";
-import prompts from "prompts"; // Import prompts for interactive CLI input
-import ora from "ora"; // For spinners
-import { configureDjango } from "../configurators/django";
-import { configureReact } from "../configurators/react";
-import { configureBundling } from "../configurators/bundling";
-import { configureTypescript } from "../configurators/typescript";
-import { configureTailwind } from "../configurators/tailwind";
-import { configureEslint } from "../configurators/eslint";
+import prompts from "prompts";
+import ora from "ora";
+import { configureDjango } from "../configurators/django/configureDjango";
+import { configureReact } from "../configurators/react/configureReact";
+import { configureBundling } from "../configurators/bundling/configureBundling";
+import { configureTypescript } from "../configurators/typescript/configureTypescript";
+import { configureTailwind } from "../configurators/tailwind/configureTailwind";
+import { configureEslint } from "../configurators/eslint/configureEslint";
 
-// Command for initialization
 export const init = new Command()
   .name("init")
   .description("initialize django project with react")
@@ -20,7 +19,6 @@ export const init = new Command()
     process.cwd()
   )
   .action(async (options) => {
-    // Interactive prompts using prompts package
     const responses = await prompts([
       {
         type: "text",
@@ -48,7 +46,6 @@ export const init = new Command()
       },
     ]);
 
-    // Spinner using Ora
     const spinner = ora("Configuring Django with React...").start();
 
     try {
@@ -82,7 +79,7 @@ export const init = new Command()
       spinner.succeed(
         `✅ Django project '${responses.projectName}' configured with React and Webpack!`
       );
-    } catch (error) {
-      spinner.fail(`Error: ${error.message}`);
+    } catch (error: any) {
+      spinner.fail(`Encountered error: ${error.message}`);
     }
   });
