@@ -3,8 +3,19 @@ import { addAppToDjangoSettings } from "./addAppToDjangoSettings";
 import { createTemplateTag } from "./createTemplateTag";
 import { checkAndInstallDjango } from "./checkAndInstallDjango";
 import { createGitignore } from "./createGitignore";
+import * as fs from "fs/promises";
 
 export async function configureDjango(projectName: string, appName: string) {
+  // Check if the current directory is writable
+  try {
+    await fs.access(process.cwd(), fs.constants.W_OK);
+  } catch (error) {
+    console.error("Error: The current directory is not writable.");
+    console.error(
+      "Please check your permissions or try running with elevated privileges."
+    );
+    throw error;
+  }
   // Check if Django is installed and install if necessary
   await checkAndInstallDjango();
 
