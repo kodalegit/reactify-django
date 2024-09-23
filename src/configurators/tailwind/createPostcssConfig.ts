@@ -1,7 +1,7 @@
 import * as fs from "fs/promises";
 import path from "path";
 
-export async function createPostcssConfig(): Promise<void> {
+export async function createPostcssConfig(appPath: string): Promise<void> {
   const postcssConfig = `
 export default {
   plugins: {
@@ -12,8 +12,5 @@ export default {
 `;
 
   // Write the PostCSS configuration to postcss.config.js
-  await fs.writeFile(
-    path.join(process.cwd(), "postcss.config.js"),
-    postcssConfig
-  );
+  await fs.writeFile(path.join(appPath, "postcss.config.js"), postcssConfig);
 }

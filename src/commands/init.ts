@@ -86,7 +86,7 @@ export const init = new Command()
 
       if (responses.useTailwind) {
         spinner.text = "Setting up Tailwind CSS...";
-        await configureTailwind(responses.useTypescript);
+        await configureTailwind(responses.useTypescript, appPath);
       }
 
       spinner.succeed(
