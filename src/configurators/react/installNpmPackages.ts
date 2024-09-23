@@ -2,11 +2,12 @@ import { execa } from "execa";
 
 export async function installNpmPackages(
   useTypescript: boolean,
-  useTailwind: boolean
+  useTailwind: boolean,
+  appPath: string
 ) {
   try {
     // Initialize npm in the app directory
-    await execa("npm", ["init", "-y"]);
+    await execa("npm", ["init", "-y"], { cwd: appPath });
 
     // Regular dependencies
     const dependencies = ["react", "react-dom"];
@@ -48,10 +49,12 @@ export async function installNpmPackages(
     }
 
     // Install regular dependencies
-    await execa("npm", ["install", ...dependencies]);
+    await execa("npm", ["install", ...dependencies], { cwd: appPath });
 
     // Install dev dependencies
-    await execa("npm", ["install", "--save-dev", ...devDependencies]);
+    await execa("npm", ["install", "--save-dev", ...devDependencies], {
+      cwd: appPath,
+    });
 
     console.log("NPM packages installed successfully.");
   } catch (error) {

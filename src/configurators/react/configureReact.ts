@@ -3,13 +3,13 @@ import * as path from "path";
 import { installNpmPackages } from "./installNpmPackages";
 
 export async function configureReact(
-  appName: string,
   useTypeScript: boolean,
-  useTailwind: boolean
+  useTailwind: boolean,
+  appPath: string
 ) {
   // Check if the current directory is writable
   try {
-    await fs.access(process.cwd(), fs.constants.W_OK);
+    await fs.access(appPath, fs.constants.W_OK);
   } catch (error) {
     console.error("Error: The current directory is not writable.");
     console.error(
@@ -18,14 +18,12 @@ export async function configureReact(
     throw error;
   }
 
-  // Navigate to app directory
-  process.chdir(appName);
-
   // Initialize npm and install packages
-  installNpmPackages(useTypeScript, useTailwind);
+  installNpmPackages(useTypeScript, useTailwind, appPath);
 
   // Create React entry point
-  mkdirSync("src", { recursive: true });
+  const srcPath = path.join(appPath, "src");
+  mkdirSync(srcPath, { recursive: true });
   const entryFile = useTypeScript ? "index.tsx" : "index.jsx";
   const entryContent = `
 import React from 'react';
@@ -35,5 +33,5 @@ import './index.css';
 ReactDOM.render(<h1>Hello, React!</h1>, document.getElementById('root'));
 `;
 
-  fs.writeFile(path.join("src", entryFile), entryContent.trim());
+  fs.writeFile(path.join(srcPath, entryFile), entryContent.trim());
 }
