@@ -1,7 +1,7 @@
 import { mkdirSync, promises as fs } from "fs";
 import * as path from "path";
 
-export async function createTemplateTag(appName: string) {
+export async function createTemplateTag(appName: string, appPath: string) {
   const tagCode = `
 import { template } from 'django';
 import { static as djangoStatic } from 'django.templatetags.static';
@@ -19,11 +19,11 @@ function reactRoot(): string {
 }
 `;
 
-  const tagPath = path.join(appName, "templatetags", "react_root.ts");
+  const tagPath = path.join(appPath, "templatetags", "react_root.ts");
   mkdirSync(path.dirname(tagPath), { recursive: true });
   await fs.writeFile(tagPath, tagCode);
 
-  const initPath = path.join(appName, "templatetags", "__init__.py");
+  const initPath = path.join(appPath, "templatetags", "__init__.py");
   fs.writeFile(
     initPath,
     "# This file makes the templatetags directory a Python package\n"

@@ -4,11 +4,16 @@ import { createTemplateTag } from "./createTemplateTag";
 import { checkAndInstallDjango } from "./checkAndInstallDjango";
 import { createGitignore } from "./createGitignore";
 import * as fs from "fs/promises";
+import path from "path";
 
-export async function configureDjango(projectName: string, appName: string) {
+export async function configureDjango(
+  projectName: string,
+  appName: string,
+  cwd: string
+) {
   // Check if the current directory is writable
   try {
-    await fs.access(process.cwd(), fs.constants.W_OK);
+    await fs.access(cwd, fs.constants.W_OK);
   } catch (error) {
     console.error("Error: The current directory is not writable.");
     console.error(
@@ -21,7 +26,7 @@ export async function configureDjango(projectName: string, appName: string) {
 
   try {
     // Create Django project
-    await execa("django-admin", ["startproject", projectName]);
+    await execa("django-admin", ["startproject", projectName], { cwd });
   } catch (error: any) {
     if (error.message.includes("command not found")) {
       console.error("Error: 'django-admin' command not found.");
@@ -44,11 +49,11 @@ export async function configureDjango(projectName: string, appName: string) {
   }
 
   // Change to the Django project directory
-  process.chdir(projectName);
+  const projectPath = path.join(cwd, projectName);
 
   try {
     // Create Django app
-    await execa("django-admin", ["startapp", appName]);
+    await execa("django-admin", ["startapp", appName], { cwd: projectPath });
   } catch (error: any) {
     if (error.message.includes("command not found")) {
       console.error("Error: 'django-admin' command not found.");
@@ -60,12 +65,13 @@ export async function configureDjango(projectName: string, appName: string) {
     throw error;
   }
 
+  const appPath = path.join(projectPath, appName);
   // Modify Django settings to include app name
-  await addAppToDjangoSettings(projectName, appName);
+  await addAppToDjangoSettings(projectName, appName, cwd);
 
   // Add custom React root template tag
-  await createTemplateTag(appName);
+  await createTemplateTag(appName, appPath);
 
   // Create .gitignore file
-  await createGitignore();
+  await createGitignore(projectPath);
 }

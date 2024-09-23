@@ -1,6 +1,7 @@
 import * as fs from "fs/promises";
+import path from "path";
 
-export async function createGitignore() {
+export async function createGitignore(projectPath: string) {
   const gitignoreContent: string = `# Python
     *.pyc
     *.pyo
@@ -35,5 +36,5 @@ export async function createGitignore() {
     .virtualenv/
     `;
 
-  await fs.writeFile(".gitignore", gitignoreContent);
+  await fs.writeFile(path.join(projectPath, ".gitignore"), gitignoreContent);
 }

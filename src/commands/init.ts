@@ -14,11 +14,12 @@ export const init = new Command()
   .option("--typescript", "use typescript", false)
   .option("--tailwind", "use tailwind", false)
   .option(
-    "-c, --cwd",
+    "-c, --cwd <directory>",
     "the working directory, defaults to current directory",
     process.cwd()
   )
   .action(async (options) => {
+    const cwd = options.cwd;
     const responses = await prompts([
       {
         type: "text",
@@ -60,7 +61,7 @@ export const init = new Command()
 
     try {
       // Configuration steps
-      await configureDjango(responses.projectName, responses.appName);
+      await configureDjango(responses.projectName, responses.appName, cwd);
       spinner.text = "Setting up React...";
       await configureReact(
         responses.appName,
