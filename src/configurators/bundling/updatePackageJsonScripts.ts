@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 
-export async function updatePackageJsonScripts() {
-  const packageJsonPath = path.join(process.cwd(), "package.json");
+export async function updatePackageJsonScripts(appPath: string) {
+  const packageJsonPath = path.join(appPath, "package.json");
 
   try {
     // Check if the package.json file exists

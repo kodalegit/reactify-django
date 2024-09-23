@@ -3,7 +3,8 @@ import path from "path";
 
 export async function createWebpackConfig(
   appName: string,
-  useTypescript: boolean
+  useTypescript: boolean,
+  appPath: string
 ) {
   const config = `
 const path = require('path');
@@ -82,7 +83,7 @@ module.exports = {
 `;
 
   try {
-    const filePath = path.join(process.cwd(), "webpack.config.js");
+    const filePath = path.join(appPath, "webpack.config.js");
     await fs.writeFile(filePath, config);
     console.log("Successfully created webpack.config.js");
   } catch (error) {

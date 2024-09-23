@@ -73,7 +73,11 @@ export const init = new Command()
       spinner.text = "Configuring ESLint...";
       await configureEslint(responses.useTypescript, appPath);
       spinner.text = "Setting up bundling...";
-      await configureBundling(responses.appName, responses.useTypescript);
+      await configureBundling(
+        responses.appName,
+        responses.useTypescript,
+        appPath
+      );
 
       if (responses.useTypescript) {
         spinner.text = "Configuring TypeScript...";

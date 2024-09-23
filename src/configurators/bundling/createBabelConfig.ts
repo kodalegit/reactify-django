@@ -1,7 +1,10 @@
 import { promises as fs } from "fs";
 import * as path from "path";
 
-export async function createBabelConfig(useTypescript: boolean) {
+export async function createBabelConfig(
+  useTypescript: boolean,
+  appPath: string
+) {
   // Babel config template
   const config = `
 module.exports = (api) => {
@@ -23,7 +26,7 @@ module.exports = (api) => {
 `;
 
   try {
-    const filePath = path.join(process.cwd(), "babel.config.js");
+    const filePath = path.join(appPath, "babel.config.js");
     await fs.writeFile(filePath, config);
     console.log("Successfully created babel.config.js");
   } catch (error) {

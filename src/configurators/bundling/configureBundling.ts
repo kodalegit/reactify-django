@@ -4,9 +4,10 @@ import { updatePackageJsonScripts } from "./updatePackageJsonScripts";
 
 export async function configureBundling(
   appName: string,
-  useTypescript: boolean
+  useTypescript: boolean,
+  appPath: string
 ) {
-  await createWebpackConfig(appName, useTypescript);
-  await createBabelConfig(useTypescript);
-  await updatePackageJsonScripts();
+  await createWebpackConfig(appName, useTypescript, appPath);
+  await createBabelConfig(useTypescript, appPath);
+  await updatePackageJsonScripts(appPath);
 }
