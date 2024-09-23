@@ -81,7 +81,7 @@ export const init = new Command()
 
       if (responses.useTypescript) {
         spinner.text = "Configuring TypeScript...";
-        await configureTypescript(responses.useTypescript);
+        await configureTypescript(appPath);
       }
 
       if (responses.useTailwind) {

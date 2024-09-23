@@ -1,6 +1,7 @@
 import { writeFile } from "fs/promises";
+import path from "path";
 
-export async function generateTsconfig() {
+export async function generateTsconfig(appPath: string) {
   const tsconfig = {
     compilerOptions: {
       target: "es6",
@@ -27,7 +28,10 @@ export async function generateTsconfig() {
   };
 
   // Write the tsconfig to a file
-  await writeFile("tsconfig.json", JSON.stringify(tsconfig, null, 2));
+  await writeFile(
+    path.join(appPath, "tsconfig.json"),
+    JSON.stringify(tsconfig, null, 2)
+  );
 
   console.log("Generated tsconfig.json successfully");
 }
