@@ -25,12 +25,22 @@ export const init = new Command()
         name: "projectName",
         message: "Enter the Django project name:",
         initial: "project",
+        format: (value: string) => value.trim(),
+        validate: (value: string) =>
+          value.length > 128
+            ? "Project name should be less than 128 characters."
+            : true,
       },
       {
         type: "text",
         name: "appName",
         message: "Enter the Django app name:",
         initial: "app",
+        format: (value: string) => value.trim(),
+        validate: (value: string) =>
+          value.length > 128
+            ? "App name should be less than 128 characters."
+            : true,
       },
       {
         type: "confirm",
