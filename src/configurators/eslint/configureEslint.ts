@@ -1,9 +1,10 @@
 import * as fs from "fs/promises";
+import path from "path";
 
 interface ESLintConfig {
   env: {
     browser: boolean;
-    es2020: boolean;
+    es2021: boolean;
   };
   extends: string[];
   parserOptions: {
@@ -15,14 +16,14 @@ interface ESLintConfig {
   };
   parser?: string;
   plugins: string[];
-  rules: {
-    [key: string]: string;
-  };
 }
 
-export async function configureEslint(useTypescript: boolean): Promise<void> {
+export async function configureEslint(
+  useTypescript: boolean,
+  appPath: string
+): Promise<void> {
   const eslintConfig: ESLintConfig = {
-    env: { browser: true, es2020: true },
+    env: { browser: true, es2021: true },
     extends: ["eslint:recommended", "plugin:react/recommended"],
     parserOptions: {
       ecmaFeatures: { jsx: true },
@@ -30,7 +31,6 @@ export async function configureEslint(useTypescript: boolean): Promise<void> {
       sourceType: "module",
     },
     plugins: ["react"],
-    rules: { "react/prop-types": "off" },
   };
 
   if (useTypescript) {
@@ -39,7 +39,10 @@ export async function configureEslint(useTypescript: boolean): Promise<void> {
     eslintConfig.plugins.push("@typescript-eslint");
   }
 
-  await fs.writeFile(".eslintrc.json", JSON.stringify(eslintConfig, null, 2));
+  await fs.writeFile(
+    path.join(appPath, ".eslintrc.json"),
+    JSON.stringify(eslintConfig, null, 2)
+  );
 
   // Create .eslintignore file
   const eslintIgnoreContent = `
@@ -50,7 +53,7 @@ dist/
 *.scss
   `.trim();
 
-  await fs.writeFile(".eslintignore", eslintIgnoreContent);
+  await fs.writeFile(path.join(appPath, ".eslintignore"), eslintIgnoreContent);
 
   console.log("ESLint configured successfully.");
 }

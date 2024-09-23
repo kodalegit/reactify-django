@@ -7,6 +7,7 @@ import { configureBundling } from "../configurators/bundling/configureBundling";
 import { configureTypescript } from "../configurators/typescript/configureTypescript";
 import { configureTailwind } from "../configurators/tailwind/configureTailwind";
 import { configureEslint } from "../configurators/eslint/configureEslint";
+import path from "path";
 
 export const init = new Command()
   .name("init")
@@ -63,13 +64,14 @@ export const init = new Command()
       // Configuration steps
       await configureDjango(responses.projectName, responses.appName, cwd);
       spinner.text = "Setting up React...";
+      const appPath = path.join(cwd, responses.projectName, responses.appName);
       await configureReact(
-        responses.appName,
         responses.useTypescript,
-        responses.useTailwind
+        responses.useTailwind,
+        appPath
       );
       spinner.text = "Configuring ESLint...";
-      await configureEslint(responses.useTypescript);
+      await configureEslint(responses.useTypescript, appPath);
       spinner.text = "Setting up bundling...";
       await configureBundling(responses.appName, responses.useTypescript);
 
