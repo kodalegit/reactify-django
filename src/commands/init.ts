@@ -20,7 +20,7 @@ export const init = new Command()
     process.cwd()
   )
   .action(async (options) => {
-    const cwd = options.cwd;
+    const cwd = path.resolve(options.cwd);
     const responses = await prompts([
       {
         type: "text",
