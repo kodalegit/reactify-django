@@ -94,5 +94,6 @@ export const init = new Command()
       );
     } catch (error: any) {
       spinner.fail(`Encountered error: ${error.message}`);
+      process.exit(1);
     }
   });
