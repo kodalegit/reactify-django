@@ -33,5 +33,5 @@ import './index.css';
 ReactDOM.render(<h1>Hello, React!</h1>, document.getElementById('root'));
 `;
 
-  fs.writeFile(path.join(srcPath, entryFile), entryContent.trim());
+  await fs.writeFile(path.join(srcPath, entryFile), entryContent.trim());
 }
