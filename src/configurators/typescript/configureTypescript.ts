@@ -1,5 +1,9 @@
 import { generateTsconfig } from "./generateTsconfig";
 
 export async function configureTypescript(appPath: string) {
-  await generateTsconfig(appPath);
+  try {
+    await generateTsconfig(appPath);
+  } catch (error) {
+    console.error(`Error configuring bundling: ${(error as Error).message}`);
+  }
 }
