@@ -1,17 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import fs from "fs";
+import { existsSync, promises as fs } from "fs";
 import path from "path";
 import { updatePackageJsonScripts } from "../../configurators/bundling/updatePackageJsonScripts";
 
-vi.mock("fs", () => ({
-  ...vi.importActual("fs"),
-  promises: {
-    readFile: vi.fn(),
-    writeFile: vi.fn(),
-  },
-  existsSync: vi.fn(),
-}));
-
+vi.mock("fs");
 vi.mock("path");
 
 describe("updatePackageJsonScripts", () => {
@@ -35,21 +27,16 @@ describe("updatePackageJsonScripts", () => {
       },
     };
 
-    (fs.existsSync as any).mockReturnValue(true);
-    (fs.promises.readFile as any).mockResolvedValue(
-      JSON.stringify(mockPackageJson)
-    );
+    vi.mocked(existsSync).mockReturnValue(true);
+    (fs.readFile as any).mockResolvedValue(JSON.stringify(mockPackageJson));
     const writeFileMock = vi
-      .spyOn(fs.promises, "writeFile")
+      .spyOn(fs, "writeFile")
       .mockResolvedValue(undefined);
 
     await updatePackageJsonScripts(mockAppPath);
 
-    expect(fs.existsSync).toHaveBeenCalledWith(mockPackageJsonPath);
-    expect(fs.promises.readFile).toHaveBeenCalledWith(
-      mockPackageJsonPath,
-      "utf-8"
-    );
+    expect(existsSync).toHaveBeenCalledWith(mockPackageJsonPath);
+    expect(fs.readFile).toHaveBeenCalledWith(mockPackageJsonPath, "utf-8");
     expect(writeFileMock).toHaveBeenCalledWith(
       mockPackageJsonPath,
       JSON.stringify(
@@ -67,29 +54,26 @@ describe("updatePackageJsonScripts", () => {
   });
 
   it("should throw an error if package.json does not exist", async () => {
-    (fs.existsSync as any).mockReturnValue(false);
+    vi.mocked(existsSync).mockReturnValue(false);
 
     await expect(updatePackageJsonScripts(mockAppPath)).rejects.toThrow(
       `${mockPackageJsonPath} does not exist.`
     );
 
-    expect(fs.existsSync).toHaveBeenCalledWith(mockPackageJsonPath);
+    expect(existsSync).toHaveBeenCalledWith(mockPackageJsonPath);
   });
 
   it("should handle and rethrow errors during file operations", async () => {
     const mockError = new Error("Mock file operation error");
 
-    (fs.existsSync as any).mockReturnValue(true);
-    (fs.promises.readFile as any).mockRejectedValue(mockError);
+    vi.mocked(existsSync).mockReturnValue(true);
+    vi.mocked(fs.readFile).mockRejectedValue(mockError);
 
     await expect(updatePackageJsonScripts(mockAppPath)).rejects.toThrow(
       mockError
     );
 
-    expect(fs.existsSync).toHaveBeenCalledWith(mockPackageJsonPath);
-    expect(fs.promises.readFile).toHaveBeenCalledWith(
-      mockPackageJsonPath,
-      "utf-8"
-    );
+    expect(existsSync).toHaveBeenCalledWith(mockPackageJsonPath);
+    expect(fs.readFile).toHaveBeenCalledWith(mockPackageJsonPath, "utf-8");
   });
 });

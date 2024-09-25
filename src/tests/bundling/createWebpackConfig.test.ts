@@ -9,9 +9,7 @@ vi.mock("fs", () => ({
   },
 }));
 
-vi.mock("path", () => ({
-  join: vi.fn((...args) => args.join("/")),
-}));
+vi.mock("path");
 
 describe("createWebpackConfig", () => {
   const mockAppName = "testApp";
@@ -27,8 +25,8 @@ describe("createWebpackConfig", () => {
   });
 
   it("should create webpack config for JavaScript project", async () => {
-    await createWebpackConfig(mockAppName, false, mockAppPath);
     vi.mocked(path.join).mockReturnValue(mockFilePath);
+    await createWebpackConfig(mockAppName, false, mockAppPath);
     expect(path.join).toHaveBeenCalledWith(mockAppPath, "webpack.config.js");
     expect(fs.writeFile).toHaveBeenCalledWith(
       mockFilePath,
@@ -41,8 +39,8 @@ describe("createWebpackConfig", () => {
   });
 
   it("should create webpack config for TypeScript project", async () => {
+    vi.mocked(path.join).mockReturnValue(mockFilePath);
     await createWebpackConfig(mockAppName, true, mockAppPath);
-
     expect(path.join).toHaveBeenCalledWith(mockAppPath, "webpack.config.js");
     expect(fs.writeFile).toHaveBeenCalledWith(
       mockFilePath,

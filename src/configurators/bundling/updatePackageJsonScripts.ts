@@ -6,7 +6,7 @@ export async function updatePackageJsonScripts(appPath: string) {
 
   try {
     // Check if the package.json file exists
-    if (existsSync(packageJsonPath)) {
+    if (!existsSync(packageJsonPath)) {
       throw new Error(`${packageJsonPath} does not exist.`);
     }
 
