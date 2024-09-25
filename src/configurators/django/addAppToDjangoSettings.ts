@@ -16,7 +16,7 @@ export async function addAppToDjangoSettings(
     let inInstalledApps = false;
     let newContent = "";
 
-    for (let line of settingsContent.split("/n")) {
+    for (let line of settingsContent.split("\n")) {
       if (line.trim().startsWith("INSTALLED_APPS")) {
         inInstalledApps = true;
         newContent += line + "\n";
@@ -32,7 +32,7 @@ export async function addAppToDjangoSettings(
       newContent += line + "\n";
     }
 
-    await fs.writeFile(settingsPath, newContent);
+    await fs.writeFile(settingsPath, newContent.trim());
     console.log(
       `App '${appName}' has been added to INSTALLED_APPS in ${settingsPath}`
     );

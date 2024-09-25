@@ -10,7 +10,8 @@
       "rootDir": "./src",
       "resolveJsonModule": true,
       "moduleResolution": "node",
-      "baseUrl": ".",   
+      "baseUrl": ".",
+      "types": ["vitest/globals"], 
       "paths": {
       "@/*": ["./*"]
      }
