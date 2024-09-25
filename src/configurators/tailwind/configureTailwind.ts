@@ -6,13 +6,17 @@ export async function configureTailwind(
   useTypescript: boolean,
   appPath: string
 ) {
-  await createTailwindConfig(useTypescript, appPath);
-  await createPostcssConfig(appPath);
-  await configureCss(appPath);
+  try {
+    await createTailwindConfig(useTypescript, appPath);
+    await createPostcssConfig(appPath);
+    await configureCss(appPath);
 
-  console.log(
-    `Tailwind has been configured with ${
-      useTypescript ? "Typescript" : "Javascript"
-    }`
-  );
+    console.log(
+      `Tailwind has been configured with ${
+        useTypescript ? "Typescript" : "Javascript"
+      }`
+    );
+  } catch (error) {
+    console.error(`Error configuring Tailwind: ${(error as Error).message}`);
+  }
 }

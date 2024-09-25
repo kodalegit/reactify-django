@@ -7,7 +7,11 @@ export async function configureBundling(
   useTypescript: boolean,
   appPath: string
 ) {
-  await createWebpackConfig(appName, useTypescript, appPath);
-  await createBabelConfig(useTypescript, appPath);
-  await updatePackageJsonScripts(appPath);
+  try {
+    await createWebpackConfig(appName, useTypescript, appPath);
+    await createBabelConfig(useTypescript, appPath);
+    await updatePackageJsonScripts(appPath);
+  } catch (error) {
+    console.error(`Error configuring bundling: ${(error as Error).message}`);
+  }
 }

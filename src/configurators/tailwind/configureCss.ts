@@ -9,7 +9,7 @@ export async function configureCss(appPath: string): Promise<void> {
 `;
 
   // Path to the index.css file
-  const cssFilePath = path.join(path.join(appPath, "src", "index.css"));
+  const cssFilePath = path.join(appPath, "src", "index.css");
 
   // Write the Tailwind directives to the index.css file
   await fs.writeFile(cssFilePath, tailwindCSS);
