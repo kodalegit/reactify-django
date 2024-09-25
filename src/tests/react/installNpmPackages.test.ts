@@ -14,6 +14,7 @@ describe("installNpmPackages", () => {
 
   it("should install packages correctly with TypeScript and Tailwind", async () => {
     const mockExeca = vi.mocked(execa);
+    mockExeca.mockResolvedValue({} as any);
 
     await installNpmPackages(true, true, "/test/app/path");
 
@@ -64,6 +65,7 @@ describe("installNpmPackages", () => {
 
   it("should install packages correctly without TypeScript and Tailwind", async () => {
     const mockExeca = vi.mocked(execa);
+    mockExeca.mockResolvedValue({} as any);
 
     await installNpmPackages(false, false, "/test/app/path");
 
