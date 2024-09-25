@@ -1,4 +1,4 @@
-import fs from "fs";
+import { existsSync, promises as fs } from "fs";
 import path from "path";
 
 export async function updatePackageJsonScripts(appPath: string) {
@@ -6,13 +6,11 @@ export async function updatePackageJsonScripts(appPath: string) {
 
   try {
     // Check if the package.json file exists
-    if (!fs.existsSync(packageJsonPath)) {
+    if (existsSync(packageJsonPath)) {
       throw new Error(`${packageJsonPath} does not exist.`);
     }
 
-    const data = JSON.parse(
-      await fs.promises.readFile(packageJsonPath, "utf-8")
-    );
+    const data = JSON.parse(await fs.readFile(packageJsonPath, "utf-8"));
 
     // Update the scripts section
     data.scripts = {
@@ -21,7 +19,7 @@ export async function updatePackageJsonScripts(appPath: string) {
     };
 
     // Write the updated package.json back to the file
-    await fs.promises.writeFile(packageJsonPath, JSON.stringify(data, null, 2));
+    await fs.writeFile(packageJsonPath, JSON.stringify(data, null, 2));
 
     console.log(`Successfully updated ${packageJsonPath} with new scripts.`);
   } catch (error) {
