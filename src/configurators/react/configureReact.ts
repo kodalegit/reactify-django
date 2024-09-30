@@ -28,10 +28,29 @@ export async function configureReact(
   const entryContent = `
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+${useTailwind ? "import './index.css'" : ""};
 
-ReactDOM.render(<h1>Hello, React!</h1>, document.getElementById('root'));
+const container = document.getElementById('react-root');
+const root = createRoot(container)
+root.render(<App />);
 `;
 
   await fs.writeFile(path.join(srcPath, entryFile), entryContent.trim());
+
+  const appFile = useTypeScript ? "App.tsx" : "App.jsx";
+  const appContent = `
+const App = () => {
+return (
+  <div>
+    <h1>Hello World</h1>
+  </div>
+);
+};
+
+export default App;
+`;
+
+  await fs.writeFile(path.join(srcPath, appFile), appContent.trim());
 }
