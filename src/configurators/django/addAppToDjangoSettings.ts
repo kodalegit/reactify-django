@@ -6,7 +6,7 @@ export async function addAppToDjangoSettings(
   appName: string,
   cwd: string
 ) {
-  const settingsPath = path.join(cwd, projectName, "settings.py");
+  const settingsPath = path.join(cwd, projectName, projectName, "settings.py");
   if (!existsSync(settingsPath)) {
     throw new Error(`${settingsPath} does not exist`);
   }
