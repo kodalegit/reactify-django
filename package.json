@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"type": "module",
 	"bin": {
-		"reactify-django": "dist/index.js"
+		"reactify-django": "dist/index.cjs"
 	},
 	"tsup": {
 		"entry": [
