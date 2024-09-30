@@ -19,7 +19,7 @@ export async function configureReact(
   }
 
   // Initialize npm and install packages
-  installNpmPackages(useTypeScript, useTailwind, appPath);
+  await installNpmPackages(useTypeScript, useTailwind, appPath);
 
   // Create React entry point
   const srcPath = path.join(appPath, "src");
