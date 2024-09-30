@@ -22,6 +22,8 @@ describe("configureReact", () => {
   const srcPath = path.join(appPath, "src");
   const entryFileJsx = "index.jsx";
   const entryFileTsx = "index.tsx";
+  const appFileJsx = "App.jsx";
+  const appFileTsx = "App.tsx";
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -47,7 +49,11 @@ describe("configureReact", () => {
     expect(mkdirSync).toHaveBeenCalledWith(srcPath, { recursive: true });
     expect(fs.writeFile).toHaveBeenCalledWith(
       path.join(srcPath, entryFileJsx),
-      expect.stringContaining("ReactDOM.render")
+      expect.stringContaining("root.render")
+    );
+    expect(fs.writeFile).toHaveBeenCalledWith(
+      path.join(srcPath, appFileJsx),
+      expect.stringContaining("Hello World")
     );
   });
 
@@ -61,7 +67,11 @@ describe("configureReact", () => {
     expect(mkdirSync).toHaveBeenCalledWith(srcPath, { recursive: true });
     expect(fs.writeFile).toHaveBeenCalledWith(
       path.join(srcPath, entryFileTsx),
-      expect.stringContaining("ReactDOM.render")
+      expect.stringContaining("root.render")
+    );
+    expect(fs.writeFile).toHaveBeenCalledWith(
+      path.join(srcPath, appFileTsx),
+      expect.stringContaining("Hello World")
     );
   });
 });
