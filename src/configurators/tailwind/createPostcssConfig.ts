@@ -3,7 +3,7 @@ import path from "path";
 
 export async function createPostcssConfig(appPath: string): Promise<void> {
   const postcssConfig = `
-export default {
+module.exports = {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
