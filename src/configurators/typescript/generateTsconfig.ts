@@ -13,7 +13,7 @@ export async function generateTsconfig(appPath: string) {
       strict: true,
       noFallthroughCasesInSwitch: true,
       module: "esnext",
-      moduleResolution: "node",
+      moduleResolution: "bundler",
       resolveJsonModule: true,
       isolatedModules: true,
       noEmit: true,
@@ -23,7 +23,7 @@ export async function generateTsconfig(appPath: string) {
         "@/*": ["src/*"],
       },
     },
-    include: ["**/*.ts", "**/*.tsx"],
+    include: ["src/**/*.ts", "src/**/*.tsx"],
     exclude: ["node_modules"],
   };
 
