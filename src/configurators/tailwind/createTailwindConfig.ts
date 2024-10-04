@@ -19,6 +19,4 @@ module.exports = {
 
   // Write the configuration to 'tailwind.config.js'
   await writeFile(path.join(appPath, "tailwind.config.js"), tailwindConfig);
-
-  console.log("Generated tailwind.config.js successfully");
 }

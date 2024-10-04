@@ -83,7 +83,6 @@ module.exports = {
   try {
     const filePath = path.join(appPath, "webpack.config.js");
     await fs.writeFile(filePath, config);
-    console.log("Successfully created webpack.config.js");
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Error: ${error.message}`);

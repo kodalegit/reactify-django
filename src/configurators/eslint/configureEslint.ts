@@ -54,6 +54,4 @@ dist/
   `.trim();
 
   await fs.writeFile(path.join(appPath, ".eslintignore"), eslintIgnoreContent);
-
-  console.log("ESLint configured successfully.");
 }

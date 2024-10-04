@@ -28,7 +28,6 @@ module.exports = (api) => {
   try {
     const filePath = path.join(appPath, "babel.config.js");
     await fs.writeFile(filePath, config);
-    console.log("Successfully created babel.config.js");
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Error: ${error.message}`);

@@ -52,15 +52,6 @@ describe("createWebpackConfig", () => {
     );
   });
 
-  it("should log success message when file is created", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
-    await createWebpackConfig(mockAppName, false, mockAppPath);
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "Successfully created webpack.config.js"
-    );
-  });
-
   it("should throw and log error when file creation fails", async () => {
     const mockError = new Error("File creation failed");
     (fs.writeFile as any).mockRejectedValue(mockError);

@@ -20,8 +20,6 @@ export async function updatePackageJsonScripts(appPath: string) {
 
     // Write the updated package.json back to the file
     await fs.writeFile(packageJsonPath, JSON.stringify(data, null, 2));
-
-    console.log(`Successfully updated ${packageJsonPath} with new scripts.`);
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Error: ${error.message}`);

@@ -55,8 +55,6 @@ export async function installNpmPackages(
     await execa("npm", ["install", "--save-dev", ...devDependencies], {
       cwd: appPath,
     });
-
-    console.log("NPM packages installed successfully.");
   } catch (error) {
     console.error(
       `An error occurred while installing npm packages: ${error}. Make sure Node is installed and try again.`

@@ -72,9 +72,6 @@ export async function configureDjango(
   // Modify Django settings to include app name
   await addAppToDjangoSettings(projectPath, projectName, appName);
 
-  // Add custom React root template tag
-  // await createTemplateTag(appName, appPath);
-
   // Create index.html template with React root and script
   await createIndexHtml(appPath, appName);
 

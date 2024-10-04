@@ -46,15 +46,6 @@ describe("createBabelConfig", () => {
     );
   });
 
-  it("logs success message when file is created", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
-    await createBabelConfig(true, mockAppPath);
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "Successfully created babel.config.js"
-    );
-  });
-
   it("throws and logs error when file creation fails", async () => {
     const mockError = new Error("File creation failed");
     vi.mocked(fs.writeFile).mockRejectedValue(mockError);

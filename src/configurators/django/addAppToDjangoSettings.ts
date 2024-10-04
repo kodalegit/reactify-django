@@ -33,9 +33,6 @@ export async function addAppToDjangoSettings(
     }
 
     await fs.writeFile(settingsPath, newContent.trim());
-    console.log(
-      `App '${appName}' has been added to INSTALLED_APPS in ${settingsPath}`
-    );
   } catch (e: any) {
     throw new Error(
       `An error occurred while accessing ${settingsPath}: ${e.message}`
