@@ -40,8 +40,7 @@ export async function modifyRootUrlsPy(
       );
     }
 
-    // Write the modified content back to the root urls.py file
-    await fs.writeFile(rootUrlsFilePath, newContent, "utf-8");
+    await fs.writeFile(rootUrlsFilePath, newContent);
   } catch (error) {
     console.error("Error updating root urls.py:", error);
   }
