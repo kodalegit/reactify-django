@@ -25,7 +25,6 @@ export async function modifyRootUrlsPy(
       );
     }
 
-    // Add the path to the app's urls if not already present
     const appUrlPattern = `path("", include("${appName}.urls")),`;
     if (!currentContent.includes(appUrlPattern)) {
       newContent = newContent.replace(
