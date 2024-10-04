@@ -2,11 +2,11 @@ import { existsSync, promises as fs } from "fs";
 import * as path from "path";
 
 export async function addAppToDjangoSettings(
+  projectPath: string,
   projectName: string,
-  appName: string,
-  cwd: string
+  appName: string
 ) {
-  const settingsPath = path.join(cwd, projectName, projectName, "settings.py");
+  const settingsPath = path.join(projectPath, projectName, "settings.py");
   if (!existsSync(settingsPath)) {
     throw new Error(`${settingsPath} does not exist`);
   }
