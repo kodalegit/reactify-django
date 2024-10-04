@@ -18,6 +18,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'static/${appName}/js'),
         filename: 'bundle.js',
+        clean: true
     },
     module: {
         rules: [
