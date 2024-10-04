@@ -46,7 +46,8 @@ if (container) {
 const App = () => {
 return (
   <div>
-    <h1>Hello World</h1>
+    <h1>Hello World!</h1>
+    <div>Here's your React App component.</div>
   </div>
 );
 };
