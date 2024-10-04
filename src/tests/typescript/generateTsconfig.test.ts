@@ -21,7 +21,7 @@ describe("generateTsconfig", () => {
         strict: true,
         noFallthroughCasesInSwitch: true,
         module: "esnext",
-        moduleResolution: "node",
+        moduleResolution: "bundler",
         resolveJsonModule: true,
         isolatedModules: true,
         noEmit: true,
@@ -31,7 +31,7 @@ describe("generateTsconfig", () => {
           "@/*": ["src/*"],
         },
       },
-      include: ["**/*.ts", "**/*.tsx"],
+      include: ["src/**/*.ts", "src/**/*.tsx"],
       exclude: ["node_modules"],
     };
 
