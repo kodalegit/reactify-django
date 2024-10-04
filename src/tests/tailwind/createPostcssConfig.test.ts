@@ -10,7 +10,7 @@ describe("createPostcssConfig", () => {
     const mockAppPath = "/mock/app/path";
     const expectedFilePath = path.join(mockAppPath, "postcss.config.js");
     const expectedPostcssConfig = `
-export default {
+module.exports = {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
