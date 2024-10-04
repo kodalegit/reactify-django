@@ -22,5 +22,5 @@ export async function createIndexHtml(appPath: string, appName: string) {
 </body>
 </html>`;
 
-  await fs.writeFile(filePath, content, "utf-8");
+  await fs.writeFile(filePath, content);
 }
