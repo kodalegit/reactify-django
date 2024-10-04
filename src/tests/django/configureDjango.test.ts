@@ -4,17 +4,23 @@ import { execa } from "execa";
 import * as fs from "fs/promises";
 import path from "path";
 import { addAppToDjangoSettings } from "../../configurators/django/addAppToDjangoSettings";
-import { createTemplateTag } from "../../configurators/django/createTemplateTag";
 import { checkAndInstallDjango } from "../../configurators/django/checkAndInstallDjango";
 import { createGitignore } from "../../configurators/django/createGitignore";
+import { modifyRootUrlsPy } from "../../configurators/django/modifyRootUrlsPy";
+import { modifyUrlsPy } from "../../configurators/django/modifyUrlsPy";
+import { modifyViewsPy } from "../../configurators/django/modifyViewsPy";
+import { createIndexHtml } from "../../configurators/django/createIndexHtml";
 
 // Mock external modules
 vi.mock("execa");
 vi.mock("fs/promises");
 vi.mock("../../configurators/django/addAppToDjangoSettings");
-vi.mock("../../configurators/django/createTemplateTag");
 vi.mock("../../configurators/django/checkAndInstallDjango");
 vi.mock("../../configurators/django/createGitignore");
+vi.mock("../../configurators/django/modifyRootUrlsPy");
+vi.mock("../../configurators/django/modifyUrlsPy");
+vi.mock("../../configurators/django/modifyViewsPy");
+vi.mock("../../configurators/django/createIndexHtml");
 
 describe("configureDjango", () => {
   const projectName = "myProject";
@@ -24,7 +30,7 @@ describe("configureDjango", () => {
   const appPath = path.join(projectPath, appName);
 
   beforeEach(() => {
-    vi.clearAllMocks(); // Clear mocks before each test
+    vi.clearAllMocks();
   });
 
   it("should create a Django project and app and configure them correctly", async () => {
@@ -43,10 +49,12 @@ describe("configureDjango", () => {
     (addAppToDjangoSettings as ReturnType<typeof vi.fn>).mockResolvedValue(
       undefined
     );
-    (createTemplateTag as ReturnType<typeof vi.fn>).mockResolvedValue(
-      undefined
-    );
+
     (createGitignore as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
+    (createIndexHtml as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
+    (modifyRootUrlsPy as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
+    (modifyUrlsPy as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
+    (modifyViewsPy as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
 
     // Call the configureDjango function
     await configureDjango(projectName, appName, cwd);
@@ -73,13 +81,20 @@ describe("configureDjango", () => {
 
     // Assert that Django settings were modified correctly
     expect(addAppToDjangoSettings).toHaveBeenCalledWith(
+      projectPath,
       projectName,
-      appName,
-      cwd
+      appName
     );
 
-    // Assert that the template tag and .gitignore were created
-    expect(createTemplateTag).toHaveBeenCalledWith(appName, appPath);
+    // Assert that django files were modified and .gitignore were created
+    expect(createIndexHtml).toHaveBeenCalledWith(appPath, appName);
+    expect(modifyUrlsPy).toHaveBeenCalledWith(appPath);
+    expect(modifyViewsPy).toHaveBeenCalledWith(appPath, appName);
+    expect(modifyRootUrlsPy).toHaveBeenCalledWith(
+      projectPath,
+      projectName,
+      appName
+    );
     expect(createGitignore).toHaveBeenCalledWith(projectPath);
   });
 
@@ -97,8 +112,11 @@ describe("configureDjango", () => {
     expect(checkAndInstallDjango).not.toHaveBeenCalled();
     expect(execa).not.toHaveBeenCalled();
     expect(addAppToDjangoSettings).not.toHaveBeenCalled();
-    expect(createTemplateTag).not.toHaveBeenCalled();
+    expect(modifyRootUrlsPy).not.toHaveBeenCalled();
+    expect(modifyUrlsPy).not.toHaveBeenCalled();
+    expect(modifyViewsPy).not.toHaveBeenCalled();
     expect(createGitignore).not.toHaveBeenCalled();
+    expect(createIndexHtml).not.toHaveBeenCalled();
   });
 
   it("should handle errors during Django project creation", async () => {
@@ -124,7 +142,10 @@ describe("configureDjango", () => {
     // Ensure the app creation step was not reached
     expect(execa).toHaveBeenCalledTimes(1); // Only project creation attempted
     expect(addAppToDjangoSettings).not.toHaveBeenCalled();
-    expect(createTemplateTag).not.toHaveBeenCalled();
+    expect(modifyRootUrlsPy).not.toHaveBeenCalled();
+    expect(modifyUrlsPy).not.toHaveBeenCalled();
+    expect(modifyViewsPy).not.toHaveBeenCalled();
     expect(createGitignore).not.toHaveBeenCalled();
+    expect(createIndexHtml).not.toHaveBeenCalled();
   });
 });
