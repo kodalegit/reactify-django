@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { modifyRootUrlsPy } from "../../configurators/django/modifyRootUrlsPy";
 import { promises as fs } from "fs";
 import { existsSync } from "fs";
-import * as path from "path";
 
 vi.mock("fs", () => ({
   promises: {
