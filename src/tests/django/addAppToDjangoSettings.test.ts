@@ -10,6 +10,7 @@ describe("addAppToDjangoSettings", () => {
   const mockProjectName = "testproject";
   const mockAppName = "testapp";
   const mockCwd = "/mock/path";
+  const mockProjecPath = "/mock/path/testproject";
   const mockSettingsPath = "/mock/path/testproject/settings.py";
 
   beforeEach(() => {
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     vi.mocked(fs.readFile).mockResolvedValue(mockSettingsContent);
     vi.mocked(fs.writeFile).mockResolvedValue(undefined);
 
-    await addAppToDjangoSettings(mockProjectName, mockAppName, mockCwd);
+    await addAppToDjangoSettings(mockProjecPath, mockProjectName, mockAppName);
 
     expect(existsSync).toHaveBeenCalledWith(mockSettingsPath);
     expect(fs.readFile).toHaveBeenCalledWith(mockSettingsPath, "utf8");
