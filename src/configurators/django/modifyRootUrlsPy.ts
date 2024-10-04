@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import { existsSync, promises as fs } from "fs";
 import * as path from "path";
 
 export async function modifyRootUrlsPy(
@@ -8,13 +8,7 @@ export async function modifyRootUrlsPy(
 ) {
   const rootUrlsFilePath = path.join(projectPath, projectName, "urls.py");
   try {
-    // Check if the root urls.py file exists
-    const fileExists = await fs
-      .access(rootUrlsFilePath)
-      .then(() => true)
-      .catch(() => false);
-
-    if (!fileExists) {
+    if (!existsSync(rootUrlsFilePath)) {
       console.error("Root urls.py file not found!");
       return;
     }
