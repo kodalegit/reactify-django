@@ -17,11 +17,8 @@ module.exports = {
   },
 };
 `;
-
-    // Call the function
     await createPostcssConfig(mockAppPath);
 
-    // Expect fs.writeFile to have been called with the correct file path and content
     expect(fs.writeFile).toHaveBeenCalledWith(
       expectedFilePath,
       expectedPostcssConfig
