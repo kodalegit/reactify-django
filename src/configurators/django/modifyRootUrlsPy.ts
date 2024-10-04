@@ -5,7 +5,7 @@ export async function modifyRootUrlsPy(
   projectPath: string,
   projectName: string,
   appName: string
-): Promise<void> {
+) {
   const rootUrlsFilePath = path.join(projectPath, projectName, "urls.py");
   try {
     // Check if the root urls.py file exists
