@@ -1,10 +1,13 @@
 import { execa } from "execa";
 import { addAppToDjangoSettings } from "./addAppToDjangoSettings";
-import { createTemplateTag } from "./createTemplateTag";
+import { createIndexHtml } from "./createIndexHtml";
 import { checkAndInstallDjango } from "./checkAndInstallDjango";
 import { createGitignore } from "./createGitignore";
 import * as fs from "fs/promises";
 import path from "path";
+import { modifyViewsPy } from "./modifyViewsPy";
+import { modifyUrlsPy } from "./modifyUrlsPy";
+import { modifyRootUrlsPy } from "./modifyRootUrlsPy";
 
 export async function configureDjango(
   projectName: string,
@@ -67,10 +70,18 @@ export async function configureDjango(
 
   const appPath = path.join(projectPath, appName);
   // Modify Django settings to include app name
-  await addAppToDjangoSettings(projectName, appName, cwd);
+  await addAppToDjangoSettings(projectPath, projectName, appName);
 
   // Add custom React root template tag
-  await createTemplateTag(appName, appPath);
+  // await createTemplateTag(appName, appPath);
+
+  // Create index.html template with React root and script
+  await createIndexHtml(appPath, appName);
+
+  // Point root URL path to index.html in views.py and urls.py
+  await modifyViewsPy(appPath, appName);
+  await modifyUrlsPy(appPath);
+  await modifyRootUrlsPy(projectPath, projectName, appName);
 
   // Create .gitignore file
   await createGitignore(projectPath);
