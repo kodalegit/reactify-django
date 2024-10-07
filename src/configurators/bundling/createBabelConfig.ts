@@ -25,15 +25,6 @@ module.exports = (api) => {
 };
 `;
 
-  try {
-    const filePath = path.join(appPath, "babel.config.js");
-    await fs.writeFile(filePath, config);
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(`Error: ${error.message}`);
-    } else {
-      console.error("An unexpected error occurred");
-    }
-    throw error;
-  }
+  const filePath = path.join(appPath, "babel.config.js");
+  await fs.writeFile(filePath, config);
 }

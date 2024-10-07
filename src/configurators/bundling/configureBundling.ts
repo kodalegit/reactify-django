@@ -1,6 +1,7 @@
 import { createBabelConfig } from "./createBabelConfig";
 import { createWebpackConfig } from "./createWebpackConfig";
 import { updatePackageJsonScripts } from "./updatePackageJsonScripts";
+import { logger } from "@/src/utils/logger";
 
 export async function configureBundling(
   appName: string,
@@ -12,6 +13,7 @@ export async function configureBundling(
     await createBabelConfig(useTypescript, appPath);
     await updatePackageJsonScripts(appPath);
   } catch (error) {
-    console.error(`Error configuring bundling: ${(error as Error).message}`);
+    logger.break();
+    logger.error(`Error configuring bundling: ${(error as Error).message}`);
   }
 }
