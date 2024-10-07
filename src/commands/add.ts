@@ -8,6 +8,7 @@ import { configureTailwind } from "../configurators/tailwind/configureTailwind";
 import { configureEslint } from "../configurators/eslint/configureEslint";
 import path from "path";
 import fs from "fs";
+import { highlighter } from "../utils/highlighter";
 
 export const add = new Command()
   .name("add")
@@ -71,7 +72,9 @@ export const add = new Command()
       }
 
       spinner.succeed(
-        `✅ Django app '${appName}' configured with React and Webpack!`
+        `Django app '${highlighter.info(
+          appName
+        )}' configured with React and Webpack!`
       );
     } catch (error: any) {
       spinner.fail(`Encountered error: ${error.message}`);
