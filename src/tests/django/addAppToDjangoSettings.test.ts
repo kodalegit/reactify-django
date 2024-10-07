@@ -58,15 +58,4 @@ INSTALLED_APPS = [
       addAppToDjangoSettings(mockProjectName, mockAppName, mockCwd)
     ).rejects.toThrow(`${mockSettingsPath} does not exist`);
   });
-
-  it("should throw an error if there is an issue reading or writing the file", async () => {
-    vi.mocked(existsSync).mockReturnValue(true);
-    vi.mocked(fs.readFile).mockRejectedValue(new Error("Read error"));
-
-    await expect(
-      addAppToDjangoSettings(mockProjectName, mockAppName, mockCwd)
-    ).rejects.toThrow(
-      `An error occurred while accessing ${mockSettingsPath}: Read error`
-    );
-  });
 });

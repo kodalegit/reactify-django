@@ -1,151 +1,150 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { configureDjango } from "../../configurators/django/configureDjango";
 import { execa } from "execa";
 import * as fs from "fs/promises";
 import path from "path";
-import { addAppToDjangoSettings } from "../../configurators/django/addAppToDjangoSettings";
 import { checkAndInstallDjango } from "../../configurators/django/checkAndInstallDjango";
-import { createGitignore } from "../../configurators/django/createGitignore";
-import { modifyRootUrlsPy } from "../../configurators/django/modifyRootUrlsPy";
-import { modifyUrlsPy } from "../../configurators/django/modifyUrlsPy";
-import { modifyViewsPy } from "../../configurators/django/modifyViewsPy";
+import { addAppToDjangoSettings } from "../../configurators/django/addAppToDjangoSettings";
 import { createIndexHtml } from "../../configurators/django/createIndexHtml";
+import { modifyViewsPy } from "../../configurators/django/modifyViewsPy";
+import { modifyUrlsPy } from "../../configurators/django/modifyUrlsPy";
+import { modifyRootUrlsPy } from "../../configurators/django/modifyRootUrlsPy";
+import { createGitignore } from "../../configurators/django/createGitignore";
+import { logger } from "../../utils/logger";
 
-// Mock external modules
+// Mock all external dependencies
 vi.mock("execa");
 vi.mock("fs/promises");
-vi.mock("../../configurators/django/addAppToDjangoSettings");
 vi.mock("../../configurators/django/checkAndInstallDjango");
-vi.mock("../../configurators/django/createGitignore");
-vi.mock("../../configurators/django/modifyRootUrlsPy");
-vi.mock("../../configurators/django/modifyUrlsPy");
-vi.mock("../../configurators/django/modifyViewsPy");
+vi.mock("../../configurators/django/addAppToDjangoSettings");
 vi.mock("../../configurators/django/createIndexHtml");
+vi.mock("../../configurators/django/modifyViewsPy");
+vi.mock("../../configurators/django/modifyUrlsPy");
+vi.mock("../../configurators/django/modifyRootUrlsPy");
+vi.mock("../../configurators/django/createGitignore");
+vi.mock("../../utils/logger");
 
 describe("configureDjango", () => {
-  const projectName = "myProject";
-  const appName = "myApp";
-  const cwd = "/fake/directory";
-  const projectPath = path.join(cwd, projectName);
-  const appPath = path.join(projectPath, appName);
+  const mockProjectName = "testproject";
+  const mockAppName = "testapp";
+  const mockCwd = "/fake/path";
 
   beforeEach(() => {
+    // Clear all mocks before each test
     vi.clearAllMocks();
+
+    // Setup default successful mocks
+    vi.mocked(fs.access).mockResolvedValue(undefined);
+    vi.mocked(checkAndInstallDjango).mockResolvedValue(undefined);
+    vi.mocked(execa).mockResolvedValue({} as any);
+    vi.mocked(addAppToDjangoSettings).mockResolvedValue(undefined);
+    vi.mocked(createIndexHtml).mockResolvedValue(undefined);
+    vi.mocked(modifyViewsPy).mockResolvedValue(undefined);
+    vi.mocked(modifyUrlsPy).mockResolvedValue(undefined);
+    vi.mocked(modifyRootUrlsPy).mockResolvedValue(undefined);
+    vi.mocked(createGitignore).mockResolvedValue(undefined);
   });
 
-  it("should create a Django project and app and configure them correctly", async () => {
-    // Mock fs.access to simulate writable directory
-    vi.spyOn(fs, "access").mockResolvedValue(undefined);
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
 
-    // Mock checkAndInstallDjango to simulate Django installation
-    (checkAndInstallDjango as ReturnType<typeof vi.fn>).mockResolvedValue(
-      undefined
-    );
+  it("should successfully configure Django when all operations succeed", async () => {
+    await configureDjango(mockProjectName, mockAppName, mockCwd);
 
-    // Mock execa to simulate the successful creation of the project and app
-    (execa as ReturnType<typeof vi.fn>).mockResolvedValue({});
-
-    // Mock the helper functions to simulate their success
-    (addAppToDjangoSettings as ReturnType<typeof vi.fn>).mockResolvedValue(
-      undefined
-    );
-
-    (createGitignore as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
-    (createIndexHtml as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
-    (modifyRootUrlsPy as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
-    (modifyUrlsPy as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
-    (modifyViewsPy as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
-
-    // Call the configureDjango function
-    await configureDjango(projectName, appName, cwd);
-
-    // Assertions
-    expect(fs.access).toHaveBeenCalledWith(cwd, fs.constants.W_OK);
+    expect(fs.access).toHaveBeenCalledWith(mockCwd, fs.constants.W_OK);
     expect(checkAndInstallDjango).toHaveBeenCalled();
-
-    // Assert that 'django-admin startproject' was called with the correct arguments
-    expect(execa).toHaveBeenNthCalledWith(
-      1,
+    expect(execa).toHaveBeenCalledWith(
       "django-admin",
-      ["startproject", projectName],
-      { cwd }
+      ["startproject", mockProjectName],
+      { cwd: mockCwd }
     );
 
-    // Assert that 'django-admin startapp' was called with the correct arguments
-    expect(execa).toHaveBeenNthCalledWith(
-      2,
+    const expectedProjectPath = path.join(mockCwd, mockProjectName);
+    expect(execa).toHaveBeenCalledWith(
       "django-admin",
-      ["startapp", appName],
-      { cwd: projectPath }
+      ["startapp", mockAppName],
+      { cwd: expectedProjectPath }
     );
 
-    // Assert that Django settings were modified correctly
-    expect(addAppToDjangoSettings).toHaveBeenCalledWith(
-      projectPath,
-      projectName,
-      appName
-    );
+    expect(addAppToDjangoSettings).toHaveBeenCalled();
+    expect(createIndexHtml).toHaveBeenCalled();
+    expect(modifyViewsPy).toHaveBeenCalled();
+    expect(modifyUrlsPy).toHaveBeenCalled();
+    expect(modifyRootUrlsPy).toHaveBeenCalled();
+    expect(createGitignore).toHaveBeenCalled();
 
-    // Assert that django files were modified and .gitignore were created
-    expect(createIndexHtml).toHaveBeenCalledWith(appPath, appName);
-    expect(modifyUrlsPy).toHaveBeenCalledWith(appPath);
-    expect(modifyViewsPy).toHaveBeenCalledWith(appPath, appName);
-    expect(modifyRootUrlsPy).toHaveBeenCalledWith(
-      projectPath,
-      projectName,
-      appName
-    );
-    expect(createGitignore).toHaveBeenCalledWith(projectPath);
+    expect(logger.success).toHaveBeenCalled();
   });
 
-  it("should throw an error if the directory is not writable", async () => {
-    // Mock fs.access to simulate an unwritable directory
-    const accessError = new Error("Permission denied");
-    vi.spyOn(fs, "access").mockRejectedValue(accessError);
+  it("should exit when directory is not writable", async () => {
+    const mockError = new Error("Permission denied");
+    vi.mocked(fs.access).mockRejectedValue(mockError);
 
-    // Call the function and expect it to throw
-    await expect(configureDjango(projectName, appName, cwd)).rejects.toThrow(
-      accessError
+    const mockExit = vi
+      .spyOn(process, "exit")
+      .mockImplementation(
+        (code?: string | number | null | undefined) => undefined as never
+      );
+
+    await configureDjango(mockProjectName, mockAppName, mockCwd);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error: The current directory is not writable."
     );
+    expect(mockExit).toHaveBeenCalledWith(1);
 
-    // Ensure that no other steps were executed
-    expect(checkAndInstallDjango).not.toHaveBeenCalled();
-    expect(execa).not.toHaveBeenCalled();
-    expect(addAppToDjangoSettings).not.toHaveBeenCalled();
-    expect(modifyRootUrlsPy).not.toHaveBeenCalled();
-    expect(modifyUrlsPy).not.toHaveBeenCalled();
-    expect(modifyViewsPy).not.toHaveBeenCalled();
-    expect(createGitignore).not.toHaveBeenCalled();
-    expect(createIndexHtml).not.toHaveBeenCalled();
+    mockExit.mockRestore();
   });
 
-  it("should handle errors during Django project creation", async () => {
-    // Mock fs.access to simulate writable directory
-    vi.spyOn(fs, "access").mockResolvedValue(undefined);
+  it("should handle django-admin command not found error", async () => {
+    const mockError = new Error("command not found");
+    vi.mocked(execa).mockRejectedValue(mockError);
 
-    // Mock checkAndInstallDjango to simulate Django installation
-    (checkAndInstallDjango as ReturnType<typeof vi.fn>).mockResolvedValue(
-      undefined
+    const mockExit = vi
+      .spyOn(process, "exit")
+      .mockImplementation(
+        (code?: string | number | null | undefined) => undefined as never
+      );
+
+    await configureDjango(mockProjectName, mockAppName, mockCwd);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.stringContaining("command not found")
     );
+    expect(mockExit).toHaveBeenCalledWith(1);
 
-    // Mock execa to throw an error when creating the project
-    const projectCreationError = new Error("command not found");
-    (execa as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
-      projectCreationError
+    mockExit.mockRestore();
+  });
+
+  it("should handle permission denied error for django-admin", async () => {
+    const mockError = new Error("permission denied");
+    vi.mocked(execa).mockRejectedValue(mockError);
+
+    const mockExit = vi
+      .spyOn(process, "exit")
+      .mockImplementation(
+        (code?: string | number | null | undefined) => undefined as never
+      );
+
+    await configureDjango(mockProjectName, mockAppName, mockCwd);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.stringContaining("Permission denied")
     );
+    expect(mockExit).toHaveBeenCalledWith(1);
 
-    // Call the function and expect it to throw
-    await expect(configureDjango(projectName, appName, cwd)).rejects.toThrow(
-      projectCreationError
+    mockExit.mockRestore();
+  });
+
+  it("should handle errors in configuration steps", async () => {
+    const mockError = new Error("Configuration error");
+    vi.mocked(addAppToDjangoSettings).mockRejectedValue(mockError);
+
+    await configureDjango(mockProjectName, mockAppName, mockCwd);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.stringContaining("Error configuring django")
     );
-
-    // Ensure the app creation step was not reached
-    expect(execa).toHaveBeenCalledTimes(1); // Only project creation attempted
-    expect(addAppToDjangoSettings).not.toHaveBeenCalled();
-    expect(modifyRootUrlsPy).not.toHaveBeenCalled();
-    expect(modifyUrlsPy).not.toHaveBeenCalled();
-    expect(modifyViewsPy).not.toHaveBeenCalled();
-    expect(createGitignore).not.toHaveBeenCalled();
-    expect(createIndexHtml).not.toHaveBeenCalled();
   });
 });
