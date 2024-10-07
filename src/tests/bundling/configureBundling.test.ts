@@ -3,8 +3,8 @@ import { configureBundling } from "../../configurators/bundling/configureBundlin
 import { createWebpackConfig } from "../../configurators/bundling/createWebpackConfig";
 import { createBabelConfig } from "../../configurators/bundling/createBabelConfig";
 import { updatePackageJsonScripts } from "../../configurators/bundling/updatePackageJsonScripts";
-import { logger } from "@/src/utils/logger";
-import { highlighter } from "@/src/utils/highlighter";
+import { logger } from "../../utils/logger";
+import { highlighter } from "../../utils/highlighter";
 
 vi.mock("../../configurators/bundling/createWebpackConfig", () => ({
   createWebpackConfig: vi.fn(),
@@ -18,7 +18,7 @@ vi.mock("../../configurators/bundling/updatePackageJsonScripts", () => ({
   updatePackageJsonScripts: vi.fn(),
 }));
 
-vi.mock("@/src/utils/logger", () => ({
+vi.mock("../../utils/logger", () => ({
   logger: {
     break: vi.fn(),
     success: vi.fn(),
@@ -26,7 +26,7 @@ vi.mock("@/src/utils/logger", () => ({
   },
 }));
 
-vi.mock("@/src/utils/highlighter", () => ({
+vi.mock("../../utils/highlighter", () => ({
   highlighter: {
     info: vi.fn((str: string) => str),
   },

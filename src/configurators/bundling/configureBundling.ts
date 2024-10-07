@@ -1,8 +1,8 @@
-import { highlighter } from "@/src/utils/highlighter";
+import { highlighter } from "../../utils/highlighter";
 import { createBabelConfig } from "./createBabelConfig";
 import { createWebpackConfig } from "./createWebpackConfig";
 import { updatePackageJsonScripts } from "./updatePackageJsonScripts";
-import { logger } from "@/src/utils/logger";
+import { logger } from "../../utils/logger";
 
 export async function configureBundling(
   appName: string,

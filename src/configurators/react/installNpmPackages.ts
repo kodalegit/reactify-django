@@ -1,5 +1,5 @@
 import { execa } from "execa";
-import { logger } from "@/src/utils/logger";
+import { logger } from "../../utils/logger";
 
 export async function installNpmPackages(
   useTypescript: boolean,

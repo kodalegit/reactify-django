@@ -9,6 +9,7 @@ import { configureBundling } from "../../configurators/bundling/configureBundlin
 import { configureTypescript } from "../../configurators/typescript/configureTypescript";
 import { configureTailwind } from "../../configurators/tailwind/configureTailwind";
 import { configureEslint } from "../../configurators/eslint/configureEslint";
+import { highlighter } from "../../utils/highlighter";
 
 vi.mock("prompts");
 vi.mock("fs");
@@ -18,6 +19,7 @@ vi.mock("../../configurators/bundling/configureBundling");
 vi.mock("../../configurators/typescript/configureTypescript");
 vi.mock("../../configurators/tailwind/configureTailwind");
 vi.mock("../../configurators/eslint/configureEslint");
+vi.mock("../../utils/highlighter");
 
 describe("add command", () => {
   const mockCwd = "/fake/path/to/django-app";

@@ -3,8 +3,8 @@ import * as path from "path";
 import { installNpmPackages } from "./installNpmPackages";
 import { createReactEntry } from "./createReactEntry";
 import { createAppComponent } from "./createAppComponent";
-import { logger } from "@/src/utils/logger";
-import { highlighter } from "@/src/utils/highlighter";
+import { logger } from "../../utils/logger";
+import { highlighter } from "../../utils/highlighter";
 
 export async function configureReact(
   useTypeScript: boolean,

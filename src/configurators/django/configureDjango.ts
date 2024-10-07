@@ -8,8 +8,8 @@ import path from "path";
 import { modifyViewsPy } from "./modifyViewsPy";
 import { modifyUrlsPy } from "./modifyUrlsPy";
 import { modifyRootUrlsPy } from "./modifyRootUrlsPy";
-import { logger } from "@/src/utils/logger";
-import { highlighter } from "@/src/utils/highlighter";
+import { logger } from "../../utils/logger";
+import { highlighter } from "../../utils/highlighter";
 
 export async function configureDjango(
   projectName: string,
