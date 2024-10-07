@@ -1,77 +1,69 @@
-import { describe, it, vi, expect, beforeEach } from "vitest";
-import { promises as fs, mkdirSync } from "fs";
-import * as path from "path";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { configureReact } from "../../configurators/react/configureReact";
 import { installNpmPackages } from "../../configurators/react/installNpmPackages";
-
-vi.mock("fs", () => ({
-  promises: {
-    access: vi.fn(),
-    writeFile: vi.fn(),
-    constants: {
-      W_OK: 2,
-    },
-  },
-  mkdirSync: vi.fn(),
-}));
+import { logger } from "../../utils/logger";
+import { promises as fs } from "fs";
 
 vi.mock("../../configurators/react/installNpmPackages");
+vi.mock("../../utils/logger");
 
 describe("configureReact", () => {
-  const appPath = "/mocked/app/path";
-  const srcPath = path.join(appPath, "src");
-  const entryFileJsx = "index.jsx";
-  const entryFileTsx = "index.tsx";
-  const appFileJsx = "App.jsx";
-  const appFileTsx = "App.tsx";
+  const appPath = "test/app/path";
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should throw an error if the directory is not writable", async () => {
-    (fs.access as any).mockRejectedValue(new Error("Permission denied"));
+  it("should configure React successfully", async () => {
+    // Mock fs.access to resolve
+    vi.spyOn(fs, "access").mockResolvedValueOnce(undefined);
 
-    await expect(configureReact(false, false, appPath)).rejects.toThrow(
-      "Permission denied"
+    // Mock the installNpmPackages function to resolve
+    (installNpmPackages as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+      undefined
     );
 
-    expect(fs.access).toHaveBeenCalledWith(appPath, fs.constants.W_OK);
-  });
-
-  it("should create the src directory and write index.jsx when useTypeScript is false", async () => {
-    (fs.access as any).mockResolvedValue(undefined);
-
-    await configureReact(false, false, appPath);
+    await configureReact(true, true, appPath);
 
     expect(fs.access).toHaveBeenCalledWith(appPath, fs.constants.W_OK);
-    expect(installNpmPackages).toHaveBeenCalledWith(false, false, appPath);
-    expect(mkdirSync).toHaveBeenCalledWith(srcPath, { recursive: true });
-    expect(fs.writeFile).toHaveBeenCalledWith(
-      path.join(srcPath, entryFileJsx),
-      expect.stringContaining("root.render")
-    );
-    expect(fs.writeFile).toHaveBeenCalledWith(
-      path.join(srcPath, appFileJsx),
-      expect.stringContaining("Hello World")
+    expect(installNpmPackages).toHaveBeenCalledWith(true, true, appPath);
+    expect(logger.success).toHaveBeenCalledWith(
+      expect.stringContaining("successfully configured with dependencies.")
     );
   });
 
-  it("should create the src directory and write index.tsx when useTypeScript is true", async () => {
-    (fs.access as any).mockResolvedValue(undefined);
+  it("should log an error and exit if the directory is not writable", async () => {
+    // Mock fs.access to reject
+    vi.spyOn(fs, "access").mockRejectedValueOnce(new Error("not writable"));
 
-    await configureReact(true, false, appPath);
+    const exitSpy = vi
+      .spyOn(process, "exit")
+      .mockImplementation(() => undefined as never);
 
-    expect(fs.access).toHaveBeenCalledWith(appPath, fs.constants.W_OK);
-    expect(installNpmPackages).toHaveBeenCalledWith(true, false, appPath);
-    expect(mkdirSync).toHaveBeenCalledWith(srcPath, { recursive: true });
-    expect(fs.writeFile).toHaveBeenCalledWith(
-      path.join(srcPath, entryFileTsx),
-      expect.stringContaining("root.render")
+    await configureReact(true, true, appPath);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error: The current directory is not writable."
     );
-    expect(fs.writeFile).toHaveBeenCalledWith(
-      path.join(srcPath, appFileTsx),
-      expect.stringContaining("Hello World")
+    expect(logger.error).toHaveBeenCalledWith(
+      "Please check your permissions or try running with elevated privileges."
+    );
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+
+  it("should log an error if an error occurs during configuration", async () => {
+    // Mock fs.access to resolve
+    vi.spyOn(fs, "access").mockResolvedValueOnce(undefined);
+
+    // Mock the installNpmPackages function to reject
+    (installNpmPackages as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Failed to install")
+    );
+
+    await configureReact(true, true, appPath);
+
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.stringContaining("Error configuring React: Failed to install")
     );
   });
 });
