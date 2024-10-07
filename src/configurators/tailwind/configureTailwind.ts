@@ -1,6 +1,8 @@
 import { createTailwindConfig } from "./createTailwindConfig";
 import { createPostcssConfig } from "./createPostcssConfig";
 import { configureCss } from "./configureCss";
+import { logger } from "@/src/utils/logger";
+import { highlighter } from "@/src/utils/highlighter";
 
 export async function configureTailwind(
   useTypescript: boolean,
@@ -11,12 +13,16 @@ export async function configureTailwind(
     await createPostcssConfig(appPath);
     await configureCss(appPath);
 
-    console.log(
-      `Tailwind has been configured with ${
-        useTypescript ? "Typescript" : "Javascript"
+    logger.break();
+    logger.success(
+      `${highlighter.info("Tailwind")} successfully configured with ${
+        useTypescript
+          ? highlighter.info("Typescript")
+          : highlighter.info("Javascript")
       }`
     );
   } catch (error) {
-    console.error(`Error configuring Tailwind: ${(error as Error).message}`);
+    logger.break();
+    logger.error(`Error configuring Tailwind: ${(error as Error).message}`);
   }
 }
