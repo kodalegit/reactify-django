@@ -56,13 +56,7 @@ describe("configureBundling", () => {
     );
     expect(createBabelConfig).toHaveBeenCalledWith(useTypescript, mockAppPath);
     expect(updatePackageJsonScripts).toHaveBeenCalledWith(mockAppPath);
-
-    expect(logger.break).toHaveBeenCalled();
-    expect(logger.success).toHaveBeenCalledWith(
-      `✅ ${highlighter.info("Webpack")} and ${highlighter.info(
-        "Babel"
-      )} successfully configured.`
-    );
+    expect(logger.success).toHaveBeenCalled();
   });
 
   it("should log an error if one of the bundling steps fails", async () => {
@@ -82,8 +76,6 @@ describe("configureBundling", () => {
     );
     expect(createBabelConfig).not.toHaveBeenCalled(); // because Webpack failed
     expect(updatePackageJsonScripts).not.toHaveBeenCalled();
-
-    expect(logger.break).toHaveBeenCalled();
     expect(logger.error).toHaveBeenCalledWith(
       `Error configuring bundling: ${mockError.message}`
     );

@@ -10,7 +10,7 @@ export async function createReactEntry(
   const entryContent = `
 import { createRoot } from 'react-dom/client';
 import App from './App';
-${useTailwind ? "import './index.css'" : ""};
+${useTailwind ? "import './index.css';" : ""}
 
 const container = document.getElementById('react-root');
 if (container) {

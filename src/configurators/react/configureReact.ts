@@ -15,8 +15,8 @@ export async function configureReact(
   try {
     await fs.access(appPath, fs.constants.W_OK);
   } catch (error) {
-    console.error("Error: The current directory is not writable.");
-    console.error(
+    logger.error("Error: The current directory is not writable.");
+    logger.error(
       "Please check your permissions or try running with elevated privileges."
     );
     process.exit(1);
