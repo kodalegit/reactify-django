@@ -32,6 +32,4 @@ export async function generateTsconfig(appPath: string) {
     path.join(appPath, "tsconfig.json"),
     JSON.stringify(tsconfig, null, 2)
   );
-
-  console.log("Generated tsconfig.json successfully");
 }
