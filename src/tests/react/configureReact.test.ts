@@ -15,10 +15,7 @@ describe("configureReact", () => {
   });
 
   it("should configure React successfully", async () => {
-    // Mock fs.access to resolve
     vi.spyOn(fs, "access").mockResolvedValueOnce(undefined);
-
-    // Mock the installNpmPackages function to resolve
     (installNpmPackages as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
       undefined
     );
@@ -33,7 +30,6 @@ describe("configureReact", () => {
   });
 
   it("should log an error and exit if the directory is not writable", async () => {
-    // Mock fs.access to reject
     vi.spyOn(fs, "access").mockRejectedValueOnce(new Error("not writable"));
 
     const exitSpy = vi
@@ -52,10 +48,8 @@ describe("configureReact", () => {
   });
 
   it("should log an error if an error occurs during configuration", async () => {
-    // Mock fs.access to resolve
     vi.spyOn(fs, "access").mockResolvedValueOnce(undefined);
 
-    // Mock the installNpmPackages function to reject
     (installNpmPackages as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
       new Error("Failed to install")
     );
