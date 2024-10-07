@@ -8,6 +8,7 @@ import { configureTypescript } from "../configurators/typescript/configureTypesc
 import { configureTailwind } from "../configurators/tailwind/configureTailwind";
 import { configureEslint } from "../configurators/eslint/configureEslint";
 import path from "path";
+import { highlighter } from "../utils/highlighter";
 
 export const init = new Command()
   .name("init")
@@ -90,7 +91,9 @@ export const init = new Command()
       }
 
       spinner.succeed(
-        `✅ Django project '${responses.projectName}' configured with React and Webpack!`
+        `Django project '${highlighter.info(
+          responses.projectName
+        )}' configured with React and Webpack!`
       );
     } catch (error: any) {
       spinner.fail(`Encountered error: ${error.message}`);
