@@ -1,4 +1,5 @@
 import { execa } from "execa";
+import { logger } from "@/src/utils/logger";
 
 export async function installNpmPackages(
   useTypescript: boolean,
@@ -56,8 +57,10 @@ export async function installNpmPackages(
       cwd: appPath,
     });
   } catch (error) {
-    console.error(
-      `An error occurred while installing npm packages: ${error}. Make sure Node is installed and try again.`
+    logger.error(
+      `An error occurred while installing npm packages: ${
+        (error as Error).message
+      }. Make sure Node is installed and try again.`
     );
     throw error;
   }

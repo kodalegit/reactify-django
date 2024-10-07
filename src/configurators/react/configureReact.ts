@@ -1,6 +1,10 @@
 import { mkdirSync, promises as fs } from "fs";
 import * as path from "path";
 import { installNpmPackages } from "./installNpmPackages";
+import { createReactEntry } from "./createReactEntry";
+import { createAppComponent } from "./createAppComponent";
+import { logger } from "@/src/utils/logger";
+import { highlighter } from "@/src/utils/highlighter";
 
 export async function configureReact(
   useTypeScript: boolean,
@@ -15,45 +19,23 @@ export async function configureReact(
     console.error(
       "Please check your permissions or try running with elevated privileges."
     );
-    throw error;
+    process.exit(1);
   }
+  try {
+    // Initialize npm and install packages
+    await installNpmPackages(useTypeScript, useTailwind, appPath);
 
-  // Initialize npm and install packages
-  await installNpmPackages(useTypeScript, useTailwind, appPath);
-
-  // Create React entry point
-  const srcPath = path.join(appPath, "src");
-  mkdirSync(srcPath, { recursive: true });
-  const entryFile = useTypeScript ? "index.tsx" : "index.jsx";
-  const entryContent = `
-import { createRoot } from 'react-dom/client';
-import App from './App';
-${useTailwind ? "import './index.css'" : ""};
-
-const container = document.getElementById('react-root');
-if (container) {
-  const root = createRoot(container);
-  root.render(<App />);
-} else {
-  console.error("React root element not found");
-}
-`;
-
-  await fs.writeFile(path.join(srcPath, entryFile), entryContent.trim());
-
-  const appFile = useTypeScript ? "App.tsx" : "App.jsx";
-  const appContent = `
-const App = () => {
-return (
-  <div>
-    <h1>Hello World!</h1>
-    <div>Here's your React App component.</div>
-  </div>
-);
-};
-
-export default App;
-`;
-
-  await fs.writeFile(path.join(srcPath, appFile), appContent.trim());
+    // Create React entry point
+    const srcPath = path.join(appPath, "src");
+    mkdirSync(srcPath, { recursive: true });
+    await createReactEntry(srcPath, useTailwind, useTypeScript);
+    await createAppComponent(srcPath, useTypeScript);
+    logger.break();
+    logger.success(
+      `${highlighter.info("React")} successfully configured with dependencies.`
+    );
+  } catch (error) {
+    logger.break();
+    logger.error(`Error configuring React: ${(error as Error).message}`);
+  }
 }
