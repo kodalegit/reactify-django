@@ -1,14 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { configureReact } from "../../configurators/react/configureReact";
 import { installNpmPackages } from "../../configurators/react/installNpmPackages";
+import { createAppComponent } from "../../configurators/react/createAppComponent";
+import { createReactEntry } from "../../configurators/react/createReactEntry";
 import { logger } from "../../utils/logger";
-import { promises as fs } from "fs";
+import { mkdirSync, promises as fs } from "fs";
 
 vi.mock("../../configurators/react/installNpmPackages");
 vi.mock("../../utils/logger");
+vi.mock("../../configurators/react/createAppComponent");
+vi.mock("../../configurators/react/createReactEntry");
+vi.mock("fs");
 
 describe("configureReact", () => {
   const appPath = "test/app/path";
+  const srcPath = "test/app/path/src";
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -23,7 +29,10 @@ describe("configureReact", () => {
     await configureReact(true, true, appPath);
 
     expect(fs.access).toHaveBeenCalledWith(appPath, fs.constants.W_OK);
+    expect(mkdirSync).toHaveBeenCalledWith(srcPath, { recursive: true });
     expect(installNpmPackages).toHaveBeenCalledWith(true, true, appPath);
+    expect(createReactEntry).toHaveBeenCalledWith(srcPath, true, true);
+    expect(createAppComponent).toHaveBeenCalledWith(srcPath, true);
     expect(logger.success).toHaveBeenCalledWith(
       expect.stringContaining("successfully configured with dependencies.")
     );
