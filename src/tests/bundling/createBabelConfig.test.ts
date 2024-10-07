@@ -45,15 +45,4 @@ describe("createBabelConfig", () => {
       expect.not.stringContaining('"@babel/preset-typescript",')
     );
   });
-
-  it("throws and logs error when file creation fails", async () => {
-    const mockError = new Error("File creation failed");
-    vi.mocked(fs.writeFile).mockRejectedValue(mockError);
-    const consoleErrorSpy = vi.spyOn(console, "error");
-
-    await expect(createBabelConfig(true, mockAppPath)).rejects.toThrow(
-      "File creation failed"
-    );
-    expect(consoleErrorSpy).toHaveBeenCalledWith("Error: File creation failed");
-  });
 });

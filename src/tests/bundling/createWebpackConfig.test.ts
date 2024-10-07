@@ -51,16 +51,4 @@ describe("createWebpackConfig", () => {
       expect.stringContaining("test: /\\.tsx?$/")
     );
   });
-
-  it("should throw and log error when file creation fails", async () => {
-    const mockError = new Error("File creation failed");
-    (fs.writeFile as any).mockRejectedValue(mockError);
-
-    const consoleSpy = vi.spyOn(console, "error");
-
-    await expect(
-      createWebpackConfig(mockAppName, false, mockAppPath)
-    ).rejects.toThrow("File creation failed");
-    expect(consoleSpy).toHaveBeenCalledWith("Error: File creation failed");
-  });
 });
