@@ -1,6 +1,6 @@
-import { logger } from "@/src/utils/logger";
+import { logger } from "../../utils/logger";
 import { generateTsconfig } from "./generateTsconfig";
-import { highlighter } from "@/src/utils/highlighter";
+import { highlighter } from "../../utils/highlighter";
 
 export async function configureTypescript(appPath: string) {
   try {

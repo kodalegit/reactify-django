@@ -1,8 +1,8 @@
 import { createTailwindConfig } from "./createTailwindConfig";
 import { createPostcssConfig } from "./createPostcssConfig";
 import { configureCss } from "./configureCss";
-import { logger } from "@/src/utils/logger";
-import { highlighter } from "@/src/utils/highlighter";
+import { logger } from "../../utils/logger";
+import { highlighter } from "../../utils/highlighter";
 
 export async function configureTailwind(
   useTypescript: boolean,
