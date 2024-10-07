@@ -100,7 +100,7 @@ export async function configureDjango(
     // Create .gitignore file
     await createGitignore(projectPath);
     logger.break();
-    logger.success(`${highlighter.info("Django")} configured successfully.`);
+    logger.success(`✅ ${highlighter.info("Django")} configured successfully.`);
   } catch (error) {
     logger.break();
     logger.error(`Error configuring django: ${(error as Error).message}`);

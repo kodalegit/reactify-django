@@ -15,7 +15,7 @@ export async function configureBundling(
     await updatePackageJsonScripts(appPath);
     logger.break();
     logger.success(
-      `${highlighter.info(`Webpack`)} and ${highlighter.info(
+      `✅ ${highlighter.info(`Webpack`)} and ${highlighter.info(
         "Babel"
       )} successfully configured.`
     );

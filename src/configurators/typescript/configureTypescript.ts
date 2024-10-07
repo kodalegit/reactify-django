@@ -7,7 +7,7 @@ export async function configureTypescript(appPath: string) {
     await generateTsconfig(appPath);
     logger.break();
     logger.success(
-      `${highlighter.info("Typescript")} successfully configured.`
+      `✅ ${highlighter.info("Typescript")} successfully configured.`
     );
   } catch (error) {
     logger.break();

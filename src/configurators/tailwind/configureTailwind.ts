@@ -15,7 +15,7 @@ export async function configureTailwind(
 
     logger.break();
     logger.success(
-      `${highlighter.info("Tailwind")} successfully configured with ${
+      `✅ ${highlighter.info("Tailwind")} successfully configured with ${
         useTypescript
           ? highlighter.info("Typescript")
           : highlighter.info("Javascript")

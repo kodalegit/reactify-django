@@ -32,7 +32,9 @@ export async function configureReact(
     await createAppComponent(srcPath, useTypeScript);
     logger.break();
     logger.success(
-      `${highlighter.info("React")} successfully configured with dependencies.`
+      `✅ ${highlighter.info(
+        "React"
+      )} successfully configured with dependencies.`
     );
   } catch (error) {
     logger.break();
