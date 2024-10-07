@@ -11,31 +11,25 @@ export async function addAppToDjangoSettings(
     throw new Error(`${settingsPath} does not exist`);
   }
 
-  try {
-    let settingsContent = await fs.readFile(settingsPath, "utf8");
-    let inInstalledApps = false;
-    let newContent = "";
+  let settingsContent = await fs.readFile(settingsPath, "utf8");
+  let inInstalledApps = false;
+  let newContent = "";
 
-    for (let line of settingsContent.split("\n")) {
-      if (line.trim().startsWith("INSTALLED_APPS")) {
-        inInstalledApps = true;
-        newContent += line + "\n";
-        continue;
-      }
-      if (inInstalledApps) {
-        if (line.trim().endsWith("]")) {
-          // Add app name before the closing bracket
-          newContent += `    '${appName}',\n`;
-          inInstalledApps = false;
-        }
-      }
+  for (let line of settingsContent.split("\n")) {
+    if (line.trim().startsWith("INSTALLED_APPS")) {
+      inInstalledApps = true;
       newContent += line + "\n";
+      continue;
     }
-
-    await fs.writeFile(settingsPath, newContent.trim());
-  } catch (e: any) {
-    throw new Error(
-      `An error occurred while accessing ${settingsPath}: ${e.message}`
-    );
+    if (inInstalledApps) {
+      if (line.trim().endsWith("]")) {
+        // Add app name before the closing bracket
+        newContent += `    '${appName}',\n`;
+        inInstalledApps = false;
+      }
+    }
+    newContent += line + "\n";
   }
+
+  await fs.writeFile(settingsPath, newContent.trim());
 }

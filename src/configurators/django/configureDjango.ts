@@ -8,6 +8,8 @@ import path from "path";
 import { modifyViewsPy } from "./modifyViewsPy";
 import { modifyUrlsPy } from "./modifyUrlsPy";
 import { modifyRootUrlsPy } from "./modifyRootUrlsPy";
+import { logger } from "@/src/utils/logger";
+import { highlighter } from "@/src/utils/highlighter";
 
 export async function configureDjango(
   projectName: string,
@@ -18,11 +20,12 @@ export async function configureDjango(
   try {
     await fs.access(cwd, fs.constants.W_OK);
   } catch (error) {
-    console.error("Error: The current directory is not writable.");
-    console.error(
+    logger.break();
+    logger.error("Error: The current directory is not writable.");
+    logger.error(
       "Please check your permissions or try running with elevated privileges."
     );
-    throw error;
+    process.exit(1);
   }
   // Check if Django is installed and install if necessary
   await checkAndInstallDjango();
@@ -32,23 +35,32 @@ export async function configureDjango(
     await execa("django-admin", ["startproject", projectName], { cwd });
   } catch (error: any) {
     if (error.message.includes("command not found")) {
-      console.error("Error: 'django-admin' command not found.");
-      console.error(
+      logger.break();
+      logger.error(
+        `Error: ${highlighter.warn("django-admin")} command not found.`
+      );
+      logger.error(
         "Ensure Django is installed and added to your system's PATH."
       );
-      console.error("You can try running 'python -m django' instead.");
-    } else if (error.message.includes("permission denied")) {
-      console.error(
-        "Error: Permission denied while trying to run 'django-admin'."
+      logger.error(
+        `You can try running ${highlighter.warn("python -m django")} instead.`
       );
-      console.error("On macOS or Unix-based systems, you might need to run:");
-      console.error("  sudo chmod +x $(which django-admin)");
+    } else if (error.message.includes("permission denied")) {
+      logger.break();
+      logger.error(
+        `Error: Permission denied while trying to run ${highlighter.warn(
+          "django-admin"
+        )}.`
+      );
+      logger.error("On macOS or Unix-based systems, you might need to run:");
+      logger.error(`${highlighter.warn("sudo chmod +x $(which django-admin")}`);
     } else {
-      console.error(
+      logger.break();
+      logger.error(
         `An error occurred while creating the Django project: ${error.message}`
       );
     }
-    throw error;
+    process.exit(1);
   }
 
   // Change to the Django project directory
@@ -59,27 +71,38 @@ export async function configureDjango(
     await execa("django-admin", ["startapp", appName], { cwd: projectPath });
   } catch (error: any) {
     if (error.message.includes("command not found")) {
-      console.error("Error: 'django-admin' command not found.");
+      logger.break();
+      logger.error(
+        `Error: ${highlighter.warn("django-admin")} command not found.`
+      );
     } else {
-      console.error(
+      logger.break();
+      logger.error(
         `An error occurred while creating the Django app: ${error.message}`
       );
     }
-    throw error;
+    process.exit(1);
   }
 
   const appPath = path.join(projectPath, appName);
-  // Modify Django settings to include app name
-  await addAppToDjangoSettings(projectPath, projectName, appName);
+  try {
+    // Modify Django settings to include app name
+    await addAppToDjangoSettings(projectPath, projectName, appName);
 
-  // Create index.html template with React root and script
-  await createIndexHtml(appPath, appName);
+    // Create index.html template with React root and script
+    await createIndexHtml(appPath, appName);
 
-  // Point root URL path to index.html in views.py and urls.py
-  await modifyViewsPy(appPath, appName);
-  await modifyUrlsPy(appPath);
-  await modifyRootUrlsPy(projectPath, projectName, appName);
+    // Point root URL path to index.html in views.py and urls.py
+    await modifyViewsPy(appPath, appName);
+    await modifyUrlsPy(appPath);
+    await modifyRootUrlsPy(projectPath, projectName, appName);
 
-  // Create .gitignore file
-  await createGitignore(projectPath);
+    // Create .gitignore file
+    await createGitignore(projectPath);
+    logger.break();
+    logger.success(`${highlighter.info("Django")} configured successfully.`);
+  } catch (error) {
+    logger.break();
+    logger.error(`Error configuring django: ${(error as Error).message}`);
+  }
 }
