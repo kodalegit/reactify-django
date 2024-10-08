@@ -40,10 +40,22 @@ describe("modifyRootUrlsPy", () => {
     );
   });
 
-  it("should add include import if missing", async () => {
-    const originalContent = "from django.urls import path\n\nurlpatterns = []";
-    const expectedContent =
-      'from django.urls import include, path\n\nurlpatterns = [\n    path("", include("myapp.urls")),]';
+  it("should create proper urls.py content with no docstring", async () => {
+    const originalContent = `from django.contrib import admin
+from django.urls import path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+]`;
+
+    const expectedContent = `from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path("", include("myapp.urls")),
+    path('admin/', admin.site.urls),
+]
+`;
 
     vi.mocked(existsSync).mockReturnValue(true);
     vi.mocked(fs.readFile).mockResolvedValueOnce(originalContent);
@@ -54,11 +66,30 @@ describe("modifyRootUrlsPy", () => {
     expect(fs.writeFile).toHaveBeenCalledWith(mockFilePath, expectedContent);
   });
 
-  it("should not modify include import if already present", async () => {
-    const originalContent =
-      "from django.urls import include, path\n\nurlpatterns = []";
-    const expectedContent =
-      'from django.urls import include, path\n\nurlpatterns = [\n    path("", include("myapp.urls")),]';
+  it("should preserve existing docstring when modifying urls.py", async () => {
+    const originalContent = `"""
+This is a test docstring.
+More information here.
+"""
+from django.contrib import admin
+from django.urls import path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+]`;
+
+    const expectedContent = `"""
+This is a test docstring.
+More information here.
+"""
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path("", include("myapp.urls")),
+    path('admin/', admin.site.urls),
+]
+`;
 
     vi.mocked(existsSync).mockReturnValue(true);
     vi.mocked(fs.readFile).mockResolvedValueOnce(originalContent);

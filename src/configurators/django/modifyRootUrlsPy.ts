@@ -14,25 +14,20 @@ export async function modifyRootUrlsPy(
     );
   }
 
-  // Read the current contents of the root urls.py
+  // Read the current content to check for docstring
   const currentContent = await fs.readFile(rootUrlsFilePath, "utf-8");
+  const docstringMatch = currentContent.match(/^"""[\s\S]*?"""\n/);
+  const docstring = docstringMatch ? docstringMatch[0] : "";
 
-  // Check if 'include' import exists, if not, add the import
-  let newContent = currentContent;
-  if (!currentContent.includes("from django.urls import include")) {
-    newContent = newContent.replace(
-      /from django\.urls import (path)(?!\s*,\s*include)/,
-      "from django.urls import include, path"
-    );
-  }
+  // Create new content with the include import and app URL
+  const newContent = `${docstring}from django.contrib import admin
+from django.urls import include, path
 
-  const appUrlPattern = `path("", include("${appName}.urls")),`;
-  if (!currentContent.includes(appUrlPattern)) {
-    newContent = newContent.replace(
-      "urlpatterns = [",
-      `urlpatterns = [\n    ${appUrlPattern}`
-    );
-  }
+urlpatterns = [
+    path("", include("${appName}.urls")),
+    path('admin/', admin.site.urls),
+]
+`;
 
   await fs.writeFile(rootUrlsFilePath, newContent);
 }
