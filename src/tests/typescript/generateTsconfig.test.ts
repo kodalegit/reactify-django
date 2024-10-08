@@ -24,7 +24,6 @@ describe("generateTsconfig", () => {
         moduleResolution: "bundler",
         resolveJsonModule: true,
         isolatedModules: true,
-        noEmit: true,
         jsx: "react-jsx",
         baseUrl: "./",
         paths: {

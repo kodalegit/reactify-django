@@ -16,7 +16,6 @@ export async function generateTsconfig(appPath: string) {
       moduleResolution: "bundler",
       resolveJsonModule: true,
       isolatedModules: true,
-      noEmit: true,
       jsx: "react-jsx",
       baseUrl: "./",
       paths: {
