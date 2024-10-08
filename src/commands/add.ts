@@ -56,18 +56,14 @@ export const add = new Command()
       // Configuration steps
       spinner.text = "Setting up React...";
       await configureReact(responses.useTypescript, responses.useTailwind, cwd);
-      spinner.text = "Configuring ESLint...";
       await configureEslint(responses.useTypescript, cwd);
-      spinner.text = "Setting up bundling...";
       await configureBundling(appName, responses.useTypescript, cwd);
 
       if (responses.useTypescript) {
-        spinner.text = "Configuring TypeScript...";
         await configureTypescript(cwd);
       }
 
       if (responses.useTailwind) {
-        spinner.text = "Setting up Tailwind CSS...";
         await configureTailwind(responses.useTypescript, cwd);
       }
 

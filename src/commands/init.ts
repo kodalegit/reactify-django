@@ -59,7 +59,7 @@ export const init = new Command()
       },
     ]);
 
-    const spinner = ora("Configuring Django with React...").start();
+    const spinner = ora().start();
 
     try {
       // Configuration steps
@@ -72,9 +72,7 @@ export const init = new Command()
         responses.useTailwind,
         appPath
       );
-      spinner.text = "Configuring ESLint...";
       await configureEslint(responses.useTypescript, appPath);
-      spinner.text = "Setting up bundling...";
       await configureBundling(
         responses.appName,
         responses.useTypescript,
@@ -82,12 +80,10 @@ export const init = new Command()
       );
 
       if (responses.useTypescript) {
-        spinner.text = "Configuring TypeScript...";
         await configureTypescript(appPath);
       }
 
       if (responses.useTailwind) {
-        spinner.text = "Setting up Tailwind CSS...";
         await configureTailwind(responses.useTypescript, appPath);
       }
 
