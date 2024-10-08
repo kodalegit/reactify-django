@@ -13,9 +13,5 @@ def index(request):
     return render(request, "${appName}/index.html")
 `;
 
-  try {
-    await fs.writeFile(viewsFilePath, content);
-  } catch (error) {
-    console.error(`Error overwriting views.py at ${viewsFilePath}:`, error);
-  }
+  await fs.writeFile(viewsFilePath, content);
 }
