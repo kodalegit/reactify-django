@@ -13,7 +13,6 @@ export async function configureBundling(
     await createWebpackConfig(appName, useTypescript, appPath);
     await createBabelConfig(useTypescript, appPath);
     await updatePackageJsonScripts(appPath);
-    logger.break();
     logger.success(
       `✅ ${highlighter.info(`Webpack`)} and ${highlighter.info(
         "Babel"
