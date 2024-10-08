@@ -63,6 +63,7 @@ export const init = new Command()
 
     try {
       // Configuration steps
+      spinner.text = "Setting up Django";
       await configureDjango(responses.projectName, responses.appName, cwd);
       spinner.text = "Setting up React...";
       const appPath = path.join(cwd, responses.projectName, responses.appName);
