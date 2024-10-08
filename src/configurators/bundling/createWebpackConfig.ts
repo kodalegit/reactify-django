@@ -6,8 +6,7 @@ export async function createWebpackConfig(
   useTypescript: boolean,
   appPath: string
 ) {
-  const config = `
-const path = require('path');
+  const config = `const path = require('path');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 module.exports = {
