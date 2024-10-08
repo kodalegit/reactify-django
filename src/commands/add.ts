@@ -50,11 +50,10 @@ export const add = new Command()
       },
     ]);
 
-    const spinner = ora().start();
+    const spinner = ora("Setting up React...").start();
 
     try {
       // Configuration steps
-      spinner.text = "Setting up React...";
       await configureReact(responses.useTypescript, responses.useTailwind, cwd);
       await configureEslint(responses.useTypescript, cwd);
       await configureBundling(appName, responses.useTypescript, cwd);
