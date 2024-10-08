@@ -13,8 +13,10 @@ export async function checkAndInstallDjango() {
     logger.log("Django is not installed. Installing Django...");
     try {
       await execa("python", ["-m", "pip", "install", "django"]);
+      logger.break();
       logger.log("Django has been installed successfully.");
     } catch (installError) {
+      logger.break();
       logger.error("Failed to install Django:", installError);
       process.exit(1);
     }

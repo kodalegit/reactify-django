@@ -13,7 +13,6 @@ export async function configureTailwind(
     await createPostcssConfig(appPath);
     await configureCss(appPath);
 
-    logger.break();
     logger.success(
       `✅ ${highlighter.info("Tailwind")} successfully configured with ${
         useTypescript
@@ -22,7 +21,6 @@ export async function configureTailwind(
       }`
     );
   } catch (error) {
-    logger.break();
     logger.error(`Error configuring Tailwind: ${(error as Error).message}`);
   }
 }
