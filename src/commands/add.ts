@@ -50,7 +50,7 @@ export const add = new Command()
       },
     ]);
 
-    const spinner = ora("Configuring Django with React...").start();
+    const spinner = ora().start();
 
     try {
       // Configuration steps
