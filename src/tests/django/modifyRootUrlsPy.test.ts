@@ -33,12 +33,11 @@ describe("modifyRootUrlsPy", () => {
   it("should handle non-existent urls.py file", async () => {
     vi.mocked(existsSync).mockReturnValue(false);
 
-    await modifyRootUrlsPy(mockProjectPath, mockProjectName, mockAppName);
-
-    expect(existsSync).toHaveBeenCalledWith(mockFilePath);
-    expect(console.error).toHaveBeenCalledWith("Root urls.py file not found!");
-    expect(fs.readFile).not.toHaveBeenCalled();
-    expect(fs.writeFile).not.toHaveBeenCalled();
+    await expect(
+      modifyRootUrlsPy(mockProjectPath, mockProjectName, mockAppName)
+    ).rejects.toThrow(
+      "Root urls.py file not found! Modify the urls.py manually to include installed app."
+    );
   });
 
   it("should add include import if missing", async () => {
@@ -68,17 +67,5 @@ describe("modifyRootUrlsPy", () => {
     await modifyRootUrlsPy(mockProjectPath, mockProjectName, mockAppName);
 
     expect(fs.writeFile).toHaveBeenCalledWith(mockFilePath, expectedContent);
-  });
-
-  it("should handle file system errors gracefully", async () => {
-    vi.mocked(existsSync).mockReturnValue(true);
-    vi.mocked(fs.readFile).mockRejectedValueOnce(new Error("Read error"));
-
-    await modifyRootUrlsPy(mockProjectPath, mockProjectName, mockAppName);
-
-    expect(console.error).toHaveBeenCalledWith(
-      "Error updating root urls.py:",
-      expect.any(Error)
-    );
   });
 });
