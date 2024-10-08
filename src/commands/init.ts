@@ -27,7 +27,7 @@ export const init = new Command()
         type: "text",
         name: "projectName",
         message: "Enter the Django project name:",
-        initial: "my-project",
+        initial: "project",
         format: (value: string) => value.trim(),
         validate: (value: string) =>
           value.length > 128
@@ -38,7 +38,7 @@ export const init = new Command()
         type: "text",
         name: "appName",
         message: "Enter the Django app name:",
-        initial: "my-app",
+        initial: "app",
         format: (value: string) => value.trim(),
         validate: (value: string) =>
           value.length > 128
