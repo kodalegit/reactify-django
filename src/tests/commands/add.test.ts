@@ -10,6 +10,7 @@ import { configureTypescript } from "../../configurators/typescript/configureTyp
 import { configureTailwind } from "../../configurators/tailwind/configureTailwind";
 import { configureEslint } from "../../configurators/eslint/configureEslint";
 import { highlighter } from "../../utils/highlighter";
+import { logger } from "../../utils/logger";
 
 vi.mock("prompts");
 vi.mock("fs");
@@ -20,6 +21,7 @@ vi.mock("../../configurators/typescript/configureTypescript");
 vi.mock("../../configurators/tailwind/configureTailwind");
 vi.mock("../../configurators/eslint/configureEslint");
 vi.mock("../../utils/highlighter");
+vi.mock("../../utils/logger");
 
 describe("add command", () => {
   const mockCwd = "/fake/path/to/django-app";
@@ -65,7 +67,6 @@ describe("add command", () => {
   it("should exit with an error if the directory is not a Django app", async () => {
     // Arrange
     vi.mocked(fs.existsSync).mockReturnValue(false);
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const processExitSpy = vi
       .spyOn(process, "exit")
       .mockImplementation(() => undefined as never);
@@ -74,8 +75,10 @@ describe("add command", () => {
     await add.parseAsync(mockArgv);
 
     // Assert
-    expect(consoleSpy).toHaveBeenCalledWith(
-      `Error: ${mockCwd} does not appear to be a Django app directory.`
+    expect(logger.error).toHaveBeenCalledWith(
+      `Error: ${highlighter.warn(
+        mockCwd
+      )} does not appear to be a Django app directory.`
     );
     expect(processExitSpy).toHaveBeenCalledWith(1);
   });

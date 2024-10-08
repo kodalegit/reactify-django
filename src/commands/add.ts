@@ -9,6 +9,7 @@ import { configureEslint } from "../configurators/eslint/configureEslint";
 import path from "path";
 import fs from "fs";
 import { highlighter } from "../utils/highlighter";
+import { logger } from "../utils/logger";
 
 export const add = new Command()
   .name("add")
@@ -30,8 +31,10 @@ export const add = new Command()
       fs.existsSync(path.join(cwd, "views.py"));
 
     if (!isdjangoApp) {
-      console.error(
-        `Error: ${cwd} does not appear to be a Django app directory.`
+      logger.error(
+        `Error: ${highlighter.warn(
+          cwd
+        )} does not appear to be a Django app directory.`
       );
       process.exit(1);
     }
