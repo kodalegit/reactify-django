@@ -4,7 +4,13 @@
 ![Code Coverage](https://img.shields.io/badge/Code%20Coverage-92.57%-green)
 [![MIT License](https://img.shields.io/badge/License-MIT-red)](https://opensource.org/license/MIT)
 
-A CLI that automates configuration of React within a Django project with sensible defaults. You can optionally set up Typescript and Tailwind for your Django project. Webpack is used as the bundler of choice. ESLint is used for linting.
+A CLI that automates configuration of React within a Django project.
+
+## Description
+
+This CLI configures React within a Django project using sensible defaults. You can optionally set up Typescript and Tailwind for your Django project. Webpack is used as the bundler of choice. ESLint is used for linting.
+
+This tool allows you to integrate React with Django, offering the flexibility to leverage Django's powerful server-side rendering (SSR) capabilities—such as templating and routing—alongside React’s dynamic client-side rendering. This enables you to create hybrid applications with the best of both worlds.
 
 ## Contents
 
@@ -12,6 +18,7 @@ A CLI that automates configuration of React within a Django project with sensibl
 - [Commands](#commands)
   - [init](#init)
   - [add](#add)
+- [Further Information](#further-information)
 - [License](#license)
 
 ## Usage
@@ -94,6 +101,26 @@ Options:
 -c, --cwd <directory> the working directory, defaults to current directory
 -h, --help display help for command
 ```
+
+## Further Information
+
+To begin using React from within Django after configuration, run `npm start` in your Django app directory where `package.json` is located. This will run the webpack dev server and bundle the React code into a JavaScript file and place it within the static folder. Webpack will automatically bundle on save allowing the Django development server to pick up the React code. When you're ready for production, run `npm run build` to bundle for production within the static folder.
+
+When using the `add` command, there are some important details to note. Webpack, by default, is configured to bundle Javascript into the `static/your_app_name/js/` folder. The path to your JavaScript bundle will thus be `static/your_app_name/js/bundle.js`.
+You can access this bundled code by injecting it into your template as follows:
+
+```
+{% load static %}
+
+...
+
+<div id="react-root"></div>
+<script src="{% static 'your_app_name/js/bundle.js' %}"></script>
+```
+
+When using the `init` command, this is done automatically. An `index.html` file is created in `templates/your_app_name/` and mapped to the root url `path("", views.index, name="index")`. This provides a reasonable starting point.
+
+All these default settings can be modified in the `webpack.config.js` and respective Django files.
 
 ## License
 
