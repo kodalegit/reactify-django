@@ -77,7 +77,7 @@ The `add` command is used to set up React within an existing Django project. Use
 
 `npx reactify-django add`
 
-Optionally specify a path to the target django app directory with the `-c` or `--cwd` option:
+Optionally specify a path to the target Django app directory with the `-c` or `--cwd` option:
 
 `npx reactify-django add -c ./path/to/app`
 
