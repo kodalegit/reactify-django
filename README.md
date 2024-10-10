@@ -1,7 +1,7 @@
 # reactify-django CLI
 
-![NPM Version](https://img.shields.io/badge/NPM-0.1.0-blue)
-![Code Coverage](https://img.shields.io/badge/Code%20Coverage-92.57%-green)
+[![NPM Version](https://img.shields.io/badge/NPM-0.1.0-blue)](https://www.npmjs.com/package/reactify-django)
+![Code Coverage](https://img.shields.io/badge/Code_Coverage-92.57%25-green)
 [![MIT License](https://img.shields.io/badge/License-MIT-red)](https://opensource.org/license/MIT)
 
 A CLI that automates configuration of React within a Django project.
