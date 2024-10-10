@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"type": "module",
 	"license": "MIT",
-	"keywords": ["cli", "django", "react", "typescript", "webpack"],
+	"keywords": ["cli", "django", "react", "typescript", "webpack", "tailwind"],
 	"author": "Victor Kimani <victorkimani77@gmail.com> (https://victorkimani.vercel.app/)",
 	"bin": {
 		"reactify-django": "dist/index.js"
