@@ -39,6 +39,7 @@ export async function checkAndInstallDjango() {
 }
 
 async function installDjango(pythonCommand: string) {
+  logger.break();
   logger.log("Django is not installed. Installing Django...");
   try {
     await execa(pythonCommand, ["-m", "pip", "install", "django"]);

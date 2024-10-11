@@ -59,7 +59,7 @@ export const init = new Command()
       },
     ]);
 
-    const spinner = ora().start();
+    const spinner = ora("Configuring Django with React...").start();
 
     try {
       // Configuration steps
