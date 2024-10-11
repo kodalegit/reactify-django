@@ -1,7 +1,7 @@
 {
 	"name": "reactify-django",
 	"description": "A CLI tool to integrate React and Webpack into Django projects, with support for TypeScript and Tailwind CSS.",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"type": "module",
 	"license": "MIT",
 	"keywords": [
