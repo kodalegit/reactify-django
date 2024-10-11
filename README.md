@@ -1,6 +1,6 @@
 # reactify-django CLI
 
-[![NPM Version](https://img.shields.io/badge/NPM-0.1.1-blue)](https://www.npmjs.com/package/reactify-django)
+[![NPM Version](https://img.shields.io/badge/NPM-0.2.0-blue)](https://www.npmjs.com/package/reactify-django)
 ![Code Coverage](https://img.shields.io/badge/Code_Coverage-92.57%25-green)
 [![MIT License](https://img.shields.io/badge/License-MIT-red)](https://opensource.org/license/MIT)
 
